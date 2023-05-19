@@ -110,9 +110,9 @@ def app_run_case(case_id, is_debug=1):
     if not has_error and run_norm:
         update_case(case_id, has_norm=1)
 
-    if not is_debug:
-        last_succ = 2 if has_error or error_count else 1
-        update_case(case_id, last_succ=last_succ)
+    # if not is_debug:
+    #     last_succ = 2 if has_error or error_count else 1
+    #     update_case(case_id, last_succ=last_succ)
 
     update_case_last_run_result(case_id, last_error_count=error_count, last_comp_count=camp_time)
     update_case(case_id, run_log=run_log, is_running=0)
