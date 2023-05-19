@@ -19,10 +19,8 @@ def _request_safari(tags, url, args=None, method='POST'):
             requests.post(url=url, headers=header, json=args)
             return True
         elif method == 'GET':
-            print(url)
-            print(args)
             response = requests.get(url=url, params=args)
-            return response
+            return HttpResponse(response)
     return False
 
 
@@ -101,9 +99,7 @@ def app_get_case_code(case_id):
 
 
 def app_get_picture(file_url, model):
-    print(model)
     if model == 'safari':
-        print(111111111)
         # from django.shortcuts import redirect
         # return redirect(MACOS_URL + '/api/case/getPic/?' + 'fileUrl=' + file_url)
         result = _request_safari(
@@ -112,7 +108,6 @@ def app_get_picture(file_url, model):
             args={'fileUrl': file_url},
             method='GET'
         )
-        print(result)
         return result
 
     file_url = os.path.join(BASE_DIR, file_url)
