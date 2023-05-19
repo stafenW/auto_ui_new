@@ -21,5 +21,5 @@ urlpatterns = [
     path('api/process/', include("process.urls")),
     path('api/case/', include("case.urls")),
     path('', views.index, name='my_index'),
-    path('launch/', views.async_view)
+    # path('launch/', views.async_view)
 ]

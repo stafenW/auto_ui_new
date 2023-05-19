@@ -20,22 +20,11 @@ def alert_qa():
     chrome_check_count, chrome_error_time, chrome_error_cases = check_result('chrome')
     safari_check_count, safari_error_time, safari_error_cases = check_result('safari')
 
-
-
     alert_bot_msg = {
         "groupId": ALERT_BOT_CODE,
-        "msg": f'{title}执行成功'
+        "msg": f'<div>chrome执行情况：共对比次数{chrome_check_count}，失败次数{chrome_error_time}，对比失败案例：{chrome_error_cases}</div>\n'
+               f'<div>safari执行情况：共对比次数{safari_check_count}，失败次数{safari_error_time}，对比失败案例：{safari_error_cases}</div>\n'
+               f'<a href="https://autoui.w.chime.me/#/case">ui自动化测试平台</a>'
     }
-    else:
-    if not error_count:
-        alert_bot_msg = {
-            "groupId": ALERT_BOT_CODE,
-            "msg": f'<div>{title}执行失败，在如下地址查看详情：</div>\n<a href="https://autoui.w.chime.me/#/case">ui自动化测试平台</a>'
-        }
-    else:
-        alert_bot_msg = {
-            "groupId": ALERT_BOT_CODE,
-            "msg": f'<div>{title}执行失败，对比次数{camp_time}，对比失败次数{error_count}，在如下地址查看详情：</div>\n<a href="https://autoui.w.chime.me/#/case">ui自动化测试平台</a>'
-        }
 
-
+    requests.post(url, json=alert_bot_msg)
