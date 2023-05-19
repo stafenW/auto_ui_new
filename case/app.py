@@ -58,7 +58,8 @@ def app_update_case_code(case_id=None, process_id=None):
 
 def app_update_norm_file(case_id):
     case = query_case_from_case_id(case_id)
-    _request_safari(case.tags, '/api/case/updateNorm', {'caseId': case_id})
+    if _request_safari(case.tags, '/api/case/updateNorm', {'caseId': case_id}):
+        return True
     mv_current_to_norm(case_id)
     return True
 
