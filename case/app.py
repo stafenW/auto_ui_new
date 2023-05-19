@@ -17,9 +17,10 @@ def _request_safari(tags, url, args=None, method='POST'):
         if method == 'POST':
             header = {'Content-Type': 'application/json'}
             requests.post(url=url, headers=header, json=args)
+            return True
         elif method == 'GET':
-            requests.get(url=url, data=args)
-        return True
+            response = requests.get(url=url, data=args)
+            return response
     return False
 
 
@@ -98,7 +99,14 @@ def app_get_case_code(case_id):
 
 
 def app_get_picture(file_url, model):
-    _request_safari(tags=model, url='/api/case/getPic', args={'fileUrl': file_url}, method='GET')
+    if model == 'safari':
+        return _request_safari(
+            tags=model,
+            url='/api/case/getPic',
+            args={'fileUrl': file_url},
+            method='GET'
+        )
+
     file_url = os.path.join(BASE_DIR, file_url)
     with open(file_url, 'rb') as f:
         image_data = f.read()
