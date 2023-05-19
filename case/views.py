@@ -97,6 +97,7 @@ def get_case_code(request):
 
 def get_pic(request):
     file_url = request.GET.get('fileUrl', '')
+    print(111111111)
     print(request.GET.get('model'))
     model = request.GET.get('model', '')
     if file_url == "":
