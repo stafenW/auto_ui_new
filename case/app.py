@@ -108,11 +108,11 @@ def app_get_picture(file_url, model):
             args={'fileUrl': file_url},
             method='GET'
         )
-        image_data = result.imag
-    else:
-        file_url = os.path.join(BASE_DIR, file_url)
-        with open(file_url, 'rb') as f:
-            image_data = f.read()
+        print(result)
+
+    file_url = os.path.join(BASE_DIR, file_url)
+    with open(file_url, 'rb') as f:
+        image_data = f.read()
     response = HttpResponse(image_data, content_type='image/jpeg')
     response['Content-Disposition'] = 'inline'
     return response
