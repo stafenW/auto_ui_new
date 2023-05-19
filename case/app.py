@@ -109,6 +109,7 @@ def app_get_picture(file_url, model):
             method='GET'
         )
         print(result)
+        return result
 
     file_url = os.path.join(BASE_DIR, file_url)
     with open(file_url, 'rb') as f:
