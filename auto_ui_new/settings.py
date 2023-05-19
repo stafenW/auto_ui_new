@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-=znuq7e5*9l1j5#j84-&*(ll6z1fkj^(x$vq&hw^!*pncq7j&o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['autoui.w.chime.me']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
