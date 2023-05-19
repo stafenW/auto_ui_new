@@ -30,4 +30,4 @@ COPY . .
 # Start Xvfb, launch Chrome, and run the Python script
 CMD xvfb-run -a --server-args="-screen 0 1280x720x24" python main.py
 
-CMD [ "python", "/manage.py", "runserver", "0.0.0.0:8086"]
+CMD [ "python", "manage.py", "runserver", "0.0.0.0:8086"]
