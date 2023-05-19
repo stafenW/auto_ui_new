@@ -1,16 +1,19 @@
+from datetime import datetime
+
 from .models import Operation
 from .models import Process
 
 
 def add_operation(ope, index, process_id):
-    new_ope = Operation()
-    ope_type = ope.get("operation")
     now = datetime.now()
-    new_ope.create_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    new_ope.ope_type = ope_type
-    new_ope.process_id = Process(id=process_id)
-    new_ope.process_index = index
-    new_ope.ope_name = ope.get("opeName")
+    new_ope = Operation(
+        create_time=now.strftime("%Y-%m-%d %H:%M:%S"),
+        ope_type=ope_type,
+        process_id=Process(id=process_id),
+        process_index=index,
+        ope_name=ope.get("opeName")
+    )
+    ope_type = ope.get("operation")
     value = ope.get("value")
 
     if ope_type == "open-page":

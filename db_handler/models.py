@@ -71,6 +71,7 @@ class Operation(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     other_process = models.IntegerField(null=True, blank=True)
     button = models.CharField(max_length=20, null=True, blank=True)
+    comp_var = models.CharField(max_length=1000, null=True, blank=True)
 
     def get_finder(self):
         return {
@@ -172,6 +173,9 @@ class Operation(models.Model):
 
     def set_keyword_opt(self, button):
         self.button = button
+
+    def set_comp_var(self, comp_var):
+        self.comp_var = comp_var
 
     class Meta:
         db_table = "operation"
