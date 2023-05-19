@@ -27,4 +27,5 @@ def alert_qa():
                f'<a href="https://autoui.w.chime.me/#/case">ui自动化测试平台</a>'
     }
 
-    requests.post(url, json=alert_bot_msg)
+    response = requests.post(url, json=alert_bot_msg)
+    return response

@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.urls import path, include
 from . import views
+from alert import check_alert
 
 urlpatterns = [
     path('api/process/', include("process.urls")),
     path('api/case/', include("case.urls")),
     path('', views.index, name='my_index'),
-    # path('launch/', views.async_view)
+    path('alert_qa/', check_alert.alert_qa)
 ]
