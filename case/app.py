@@ -102,6 +102,7 @@ def app_get_case_code(case_id):
 
 def app_get_picture(file_url, model):
     if model == 'safari':
+        print(111111111)
         # from django.shortcuts import redirect
         # return redirect(MACOS_URL + '/api/case/getPic/?' + 'fileUrl=' + file_url)
         result = _request_safari(
