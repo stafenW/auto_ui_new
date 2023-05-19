@@ -97,7 +97,7 @@ def get_case_code(request):
 
 def get_pic(request):
     file_url = request.GET.get('fileUrl', '')
-    model = request.GET.get('model')
+    model = request.GET.get('model', '')
     if file_url == "":
         return HttpResponse("need param 'fileUrl'")
     response = app_get_picture(file_url, model)
