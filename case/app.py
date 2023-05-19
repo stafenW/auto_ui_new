@@ -19,7 +19,9 @@ def _request_safari(tags, url, args=None, method='POST'):
             requests.post(url=url, headers=header, json=args)
             return True
         elif method == 'GET':
-            response = requests.get(url=url, data=args)
+            print(url)
+            print(args)
+            response = requests.get(url=url, params=args)
             return response
     return False
 
