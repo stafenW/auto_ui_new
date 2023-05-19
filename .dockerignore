@@ -1,0 +1,8 @@
+.git
+.gitignore
+.gitlab-ci.yml
+.static
+.templates
+.case-records
+.env.py
+.venv
