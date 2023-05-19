@@ -100,12 +100,19 @@ def app_get_case_code(case_id):
 
 def app_get_picture(file_url, model):
     if model == 'safari':
-        from django.shortcuts import redirect
-        return redirect(MACOS_URL + '/api/case/getPic/?' + 'fileUrl=' + file_url)
-
-    file_url = os.path.join(BASE_DIR, file_url)
-    with open(file_url, 'rb') as f:
-        image_data = f.read()
+        # from django.shortcuts import redirect
+        # return redirect(MACOS_URL + '/api/case/getPic/?' + 'fileUrl=' + file_url)
+        result = _request_safari(
+            tags=model,
+            url='/api/case/getPic',
+            args={'fileUrl': file_url},
+            method='GET'
+        )
+        image_data = result.imag
+    else:
+        file_url = os.path.join(BASE_DIR, file_url)
+        with open(file_url, 'rb') as f:
+            image_data = f.read()
     response = HttpResponse(image_data, content_type='image/jpeg')
     response['Content-Disposition'] = 'inline'
     return response
