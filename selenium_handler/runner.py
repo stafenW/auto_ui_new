@@ -23,7 +23,7 @@ def get_curr_time_str():
     return f'Time : {date_time_str}'
 
 
-def get_var_info(ope_name, url):
+def get_var_info(ope_name, url, model='chrome'):
     if ope_name == "get-text":
         url = os.path.join(BASE_DIR, "../", url)
         with open(url, "r") as f:
@@ -33,7 +33,7 @@ def get_var_info(ope_name, url):
             '''
     else:
         content = f'''
-        <img title="{ope_name}" class="snap-img" src="/api/case/getPic?fileUrl={url}" />
+        <img title="{ope_name}" class="snap-img" src="/api/case/getPic?fileUrl={url}&model={model}" />
         '''
     return content
 
@@ -81,7 +81,7 @@ def format_str(content):
     return content
 
 
-def run_case(code, options):
+def run_case(code, options, model='chrome'):
     # code内使用的文件夹根路径
     cfp = options.get("caseFilePath")
     run_norm = options.get("runNorm")
@@ -168,7 +168,7 @@ def run_case(code, options):
                 append_log("ope-item", f'''
                 <div class="ope-info">Operation '{var_ope_name}' result:</div>
                 <div class="result">
-                    {get_var_info(ope_type, url)}
+                    {get_var_info(ope_type, url, model)}
                 </div>
                 ''')
             else:
@@ -182,8 +182,8 @@ def run_case(code, options):
                 append_log("ope-item", f'''
                 <div class="ope-info">Operation '{var_ope_name}' result:</div>
                     <div class="result">
-                        <div class="norm">{get_var_info(ope_type, norm_url)}</div>
-                        <div class="current">{get_var_info(ope_type, curr_url)}</div>
+                        <div class="norm">{get_var_info(ope_type, norm_url, model)}</div>
+                        <div class="current">{get_var_info(ope_type, curr_url, model)}</div>
                     </div>
                     <div class="compare-result-">
                         <div>Compare Result:</div>

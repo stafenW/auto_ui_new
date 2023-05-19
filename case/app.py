@@ -1,6 +1,8 @@
 import platform
 import threading
 
+from django.http import HttpResponse
+
 from db_handler.handler_case import *
 from file_handler.handler_file import *
 from db_handler.handler_process import *
@@ -9,11 +11,14 @@ from selenium_handler import runner
 import requests
 
 
-def _request_safari(tags, url, args):
+def _request_safari(tags, url, args=None, method='POST'):
     if 'safari' in tags and 'Darwin' != platform.system():
         url = MACOS_URL + url
-        header = {'Content-Type': 'application/json'}
-        requests.post(url=url, headers=header, json=args)
+        if method == 'POST':
+            header = {'Content-Type': 'application/json'}
+            requests.post(url=url, headers=header, json=args)
+        elif method == 'GET':
+            requests.get(url=url, data=args)
         return True
     return False
 
@@ -92,20 +97,39 @@ def app_get_case_code(case_id):
     return data
 
 
+def app_get_picture(file_url, model):
+    _request_safari(tags=model, url='/api/case/getPic', args={'fileUrl': file_url}, method='GET')
+    file_url = os.path.join(BASE_DIR, file_url)
+    with open(file_url, 'rb') as f:
+        image_data = f.read()
+    response = HttpResponse(image_data, content_type='image/jpeg')
+    response['Content-Disposition'] = 'inline'
+    return response
+
+
 def app_run_case(case_id, is_debug=1):
     case = query_case_from_case_id(case_id)
     if _request_safari(case.tags, '/api/case/runCases', args={'caseId': case_id, 'debug': is_debug}):  # 这里需要修改
         return True
+
+    if 'chrome' in case.tags:
+        model = 'chrome'
+    else:
+        model = 'safari'
     print(f'开始run{case_id}')
 
     case_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}")
     update_case(case_id, is_running=1)
 
     run_norm = not bool(case.has_norm)
-    has_error, run_log, error_count, camp_time = runner.run_case(case.code, {
-        "caseFilePath": case_file_path,
-        "runNorm": run_norm
-    })
+    has_error, run_log, error_count, camp_time = runner.run_case(
+        code=case.code,
+        model=model,
+        options={
+            "caseFilePath": case_file_path,
+            "runNorm": run_norm
+        }
+    )
 
     if not is_debug:
         case.last_succ = 2 if has_error or error_count else 1

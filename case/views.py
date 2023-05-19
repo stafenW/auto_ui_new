@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from .app import *
 
 BASE_DIR = settings.BASE_DIR
@@ -97,17 +97,11 @@ def get_case_code(request):
 
 def get_pic(request):
     file_url = request.GET.get('fileUrl', '')
+    model = request.GET.get('model')
     if file_url == "":
         return HttpResponse("need param 'fileUrl'")
-    file_url = os.path.join(BASE_DIR, file_url)
-    try:
-        with open(file_url, 'rb') as f:
-            image_data = f.read()
-        response = HttpResponse(image_data, content_type='image/jpeg')
-        response['Content-Disposition'] = 'inline'
-        return response
-    except Exception as e:
-        return HttpResponse(f"Error with reason: '{str(e)}'")
+    response = app_get_picture(file_url, model)
+    return response
 
 
 def run_case(request):
