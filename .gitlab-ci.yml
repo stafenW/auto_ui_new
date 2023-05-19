@@ -14,4 +14,4 @@ build:
     - docker build -f Dockerfile -t harbor.w.chime.me/crm/auto-ui:$VERSION .
     - docker push harbor.w.chime.me/crm/auto-ui:$VERSION
     - docker rm -f auto-ui || true
-    - docker run -d -p 8086:8086 --name auto-ui --restart=on-failure:5 -v /home/web/auto-ui/env.py:/usr/src/app/service/env.py -v /home/web/auto-ui/snapshot/case-records:/usr/src/app/case-records -v /home/web/auto-ui/static:/usr/src/app/service/static -v /home/web/auto-ui/templates:/usr/src/app/service/templates harbor.w.chime.me/crm/auto-ui:$VERSION
+    - docker run -d -p 8086:8086 --name auto-ui --restart=on-failure:5 -v /home/web/auto-ui/env.py:/usr/src/app/env.py -v /home/web/auto-ui/snapshot/case-records:/usr/src/case-records -v /home/web/auto-ui/static:/usr/src/app/static -v /home/web/auto-ui/templates:/usr/src/app/templates harbor.w.chime.me/crm/auto-ui:$VERSION
