@@ -5,6 +5,8 @@ from .models import Process
 
 
 def add_operation(ope, index, process_id):
+    ope_type = ope.get("operation")
+    value = ope.get("value")
     now = datetime.now()
     new_ope = Operation(
         create_time=now.strftime("%Y-%m-%d %H:%M:%S"),
@@ -13,8 +15,6 @@ def add_operation(ope, index, process_id):
         process_index=index,
         ope_name=ope.get("opeName")
     )
-    ope_type = ope.get("operation")
-    value = ope.get("value")
 
     if ope_type == "open-page":
         new_ope.set_open_url(value.get("url"))

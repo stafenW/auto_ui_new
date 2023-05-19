@@ -84,7 +84,7 @@ def app_run_case(case_id, is_debug=1):
     print(case.tags)
     if 'safari' in case.tags and 'Darwin' != platform.system():
         print('这个是safari case')
-        url = MACOS_URL + '/api/case/runCases' # 这里需要修改
+        url = MACOS_URL + '/api/case/runCases'  # 这里需要修改
         header = {'Content-Type': 'application/json'}
         requests.post(url=url, headers=header, json={'caseId': case_id, 'debug': is_debug})
         return True
