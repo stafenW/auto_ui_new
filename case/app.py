@@ -9,6 +9,15 @@ from selenium_handler import runner
 import requests
 
 
+def _request_safari(tags, url, args):
+    if 'safari' in tags and 'Darwin' != platform.system():
+        url = MACOS_URL + url
+        header = {'Content-Type': 'application/json'}
+        requests.post(url=url, headers=header, json=args)
+        return True
+    return False
+
+
 def app_add_new_cases(data):
     for case in data:
         add_new_case(case, model='chrome')
@@ -16,6 +25,8 @@ def app_add_new_cases(data):
 
 
 def app_delete_case(case_id):
+    case = query_case_from_case_id(case_id)
+    _request_safari(case.tags, '/api/case/delCase', {'caseId': case_id})
     delete_case(case_id)
 
 
@@ -40,6 +51,8 @@ def app_update_case_code(case_id=None, process_id=None):
 
 
 def app_update_norm_file(case_id):
+    case = query_case_from_case_id(case_id)
+    _request_safari(case.tags, '/api/case/updateNorm', {'caseId': case_id})
     mv_current_to_norm(case_id)
     return True
 
@@ -81,12 +94,7 @@ def app_get_case_code(case_id):
 
 def app_run_case(case_id, is_debug=1):
     case = query_case_from_case_id(case_id)
-    print(case.tags)
-    if 'safari' in case.tags and 'Darwin' != platform.system():
-        print('这个是safari case')
-        url = MACOS_URL + '/api/case/runCases'  # 这里需要修改
-        header = {'Content-Type': 'application/json'}
-        requests.post(url=url, headers=header, json={'caseId': case_id, 'debug': is_debug})
+    if _request_safari(case.tags, '/api/case/runCases', args={'caseId': case_id, 'debug': is_debug}):  # 这里需要修改
         return True
     print(f'开始run{case_id}')
 
