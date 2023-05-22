@@ -140,7 +140,7 @@ def app_run_case(case_id, is_debug=1):
 
     case_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}")
     update_case(case_id, is_running=1)
-
+    logging.info('run chrome case')
     run_norm = not bool(case.has_norm)
     has_error, run_log, error_count, camp_time = runner.run_case(
         code=case.code,
