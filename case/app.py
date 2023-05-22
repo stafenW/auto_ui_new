@@ -150,6 +150,7 @@ def app_run_case(case_id, is_debug=1):
             "runNorm": run_norm
         }
     )
+    logging.info(run_log)
 
     has_norm = 1 if not has_error and run_norm else case.has_norm
     last_succ = 2 if has_error else 1
