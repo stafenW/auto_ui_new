@@ -14,9 +14,8 @@ def add_cases(request):
 
 def del_case(request):
     data = json.loads(request.body)
-    app_delete_case(data.get('caseId'))
     return JsonResponse({
-        "code": 0
+        "code": app_delete_case(data.get('caseId'))
     })
 
 

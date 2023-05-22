@@ -31,12 +31,15 @@ def app_add_new_cases(data):
     for case in data:
         add_new_case(case, model='chrome')
         add_new_case(case, model='safari')
+    return True
 
 
 def app_delete_case(case_id):
     case = query_case_from_case_id(case_id)
-    _request_safari(case.tags, '/api/case/delCase', {'caseId': case_id})
+    if _request_safari(case.tags, '/api/case/delCase', {'caseId': case_id}):
+        return True
     delete_case(case_id)
+    return True
 
 
 def app_update_case_code(case_id=None, process_id=None):
