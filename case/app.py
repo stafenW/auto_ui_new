@@ -9,6 +9,9 @@ from db_handler.handler_process import *
 from env import *
 from selenium_handler import runner
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _request_safari(tags, url, args=None, method='POST'):
@@ -128,7 +131,7 @@ def app_run_case(case_id, is_debug=1):
         model = 'chrome'
     else:
         model = 'safari'
-    print(f'开始run{case_id}')
+    logging.info(f'开始run{case_id}')
 
     case_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}")
     update_case(case_id, is_running=1)
@@ -143,11 +146,8 @@ def app_run_case(case_id, is_debug=1):
         }
     )
 
-    if not is_debug:
-        case.last_succ = 2 if has_error or error_count else 1
-
-    if not has_error and run_norm:
-        case.has_norm = 1
+    has_norm = 1 if not has_error and run_norm else case.has_norm
+    last_succ = 2 if has_error else 1
 
     update_case_last_run_result(
         case_id,
@@ -157,6 +157,8 @@ def app_run_case(case_id, is_debug=1):
 
     update_case(
         case_id,
+        has_norm=has_norm,
+        last_succ=last_succ,
         run_log=run_log,
         is_running=0
     )
