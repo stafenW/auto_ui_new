@@ -171,7 +171,7 @@ def _write_keyword(type=None, val=None, input_val='ENTER'):
     var_name = _get_random_var_name("input")
     code = f'''
 {_find_element(var_name, type, val)}
-{var_name}.send_keys(Keys.{input_val}
+{var_name}.send_keys(Keys.{input_val})
         '''
     return code
 
