@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def _request_safari(tags, url, args=None, method='POST'):
-    logging.info(tags)
     if 'safari' in tags and 'Darwin' != platform.system():
-        logging.info('这个是safari的文件')
         url = MACOS_URL + url
         if method == 'POST':
             header = {'Content-Type': 'application/json'}
@@ -140,7 +138,6 @@ def app_run_case(case_id, is_debug=1):
 
     case_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}")
     update_case(case_id, is_running=1)
-    logging.info('run chrome case')
     run_norm = not bool(case.has_norm)
     has_error, run_log, error_count, camp_time = runner.run_case(
         code=case.code,
@@ -150,7 +147,6 @@ def app_run_case(case_id, is_debug=1):
             "runNorm": run_norm
         }
     )
-    logging.info(run_log)
 
     has_norm = 1 if not has_error and run_norm else case.has_norm
     last_succ = 2 if has_error else 1

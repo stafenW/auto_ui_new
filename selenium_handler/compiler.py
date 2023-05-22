@@ -316,6 +316,8 @@ def _write_code(operations):
             operation_code = _write_input(ef["findType"], es_str(ef["findVal"]), es_str(ov["inputVal"]),
                                           ov.get("isEnter"))
         elif ope_type == "keyword-opt":
+            print(ef["findType"])
+            print(es_str(ef["findVal"]))
             operation_code = _write_keyword(ef["findType"], es_str(ef["findVal"]), es_str(ov.get('keywordOpt')))
         elif ope_type == "wait":
             operation_code = _write_wait(ov["timeLimit"])

@@ -130,7 +130,6 @@ def run_case(code, options, model='chrome'):
             raise e
 
     has_error = False
-    logging.info(code)
     # 变量操作容器
     _VAR_OPE_RECORD_ = []
     for i in range(RETRY):
@@ -141,7 +140,6 @@ def run_case(code, options, model='chrome'):
             exec(code)
             break
         except Exception as e:
-            logging.info(e)
             append_log(
                 "ignore-error",
                 f"retry {i + 1} end"
