@@ -2,11 +2,12 @@ from .models import Case
 import json
 from selenium_handler import compiler
 from datetime import datetime
+from django.utils import timezone
 from file_handler.handler_file import *
 
 
 def add_new_case(case: json, model='chrome'):
-    now = datetime.now()
+    now = timezone.make_aware(datetime.now())
     new_case = Case(
         process_id=case.get("id"),
         title=case.get("caseTitle"),
@@ -46,7 +47,7 @@ def update_case_last_run_result(case_id, last_comp_count=0, last_error_count=0):
 
 
 def query_all_cases():
-    return Case.objects.all()
+    return Case.objects.all().order_by("-create_time")
 
 
 def query_case_from_case_id(case_id):

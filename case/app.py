@@ -124,7 +124,7 @@ def app_get_picture(file_url, model):
 
 def app_run_case(case_id, is_debug=1):
     case = query_case_from_case_id(case_id)
-    if _request_safari(case.tags, '/api/case/runCases', args={'caseId': case_id, 'debug': is_debug}):  # 这里需要修改
+    if _request_safari(case.tags, '/api/case/runCase', args={'caseId': case_id, 'debug': is_debug}):  # 这里需要修改
         return True
 
     if 'chrome' in case.tags:

@@ -8,5 +8,5 @@ urlpatterns = [
     path('deleteProcess', views.delete_process),
     path('updateProcess', views.update_process),
     path('getTagList', views.get_tag_list),
-    path('getBottonList', views.get_keyword_list)
+    path('getButtonList', views.get_keyword_list)
 ]

@@ -54,4 +54,4 @@ def get_tag_list(request):
 
 
 def get_keyword_list(request):
-    return JsonResponse(ALL_BOTTON, safe=False)
+    return JsonResponse(ALL_BUTTON, safe=False)

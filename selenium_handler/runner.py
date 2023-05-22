@@ -68,7 +68,7 @@ def compare_vars(ope_name, url1, url2):
         return ("Equal", 0) if content1 == content2 else ("Not Equal", 1)
     else:
         similarity = round(image_similarity(url1, url2)[0][0], 4) * 100
-        return (f'{similarity}%', 0) if similarity > LOWEST_SIMILARYTY else (f'{similarity}%', 1)
+        return (f'{similarity}%', 0) if similarity > LOWEST_SIMILARITY else (f'{similarity}%', 1)
 
 
 def format_str(content):

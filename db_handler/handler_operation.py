@@ -43,6 +43,7 @@ def add_operation(ope, index, process_id):
     elif ope_type == "other-process":
         new_ope.set_other_process(value.get("otherProcessId"))
     elif ope_type == "keyword-opt":
+        new_ope.set_finder(value.get("elFinder"))
         new_ope.set_keyword_opt(value.get('keywordOpt'))
     new_ope.save()
 

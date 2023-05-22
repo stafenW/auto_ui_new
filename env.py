@@ -1,9 +1,9 @@
-LOWEST_SIMILARYTY = 96
+LOWEST_SIMILARITY = 96
 RETRY = 3
 ALERT_BOT_CODE = 're_01f56c58e0e9414c84c741ce29e652ca'
-ALL_TAGS = ['excute on launch', 'excute on everyday', 'about lead', 'about transaction']
+ALL_TAGS = ['execute on launch', 'execute on everyday', 'about lead', 'about transaction']
 CODE_INDEX = ['import', 'chrome_options', 'driver', '.click', 'send_keys', 'time.sleep', 'WebDriverWait']
 # BASE_URL_TEST = 'https://autoui.w.chime.me'
 BASE_URL_TEST = 'http://192.168.20.34:8086'
-ALL_BOTTON = ['ENTER', 'TAB', 'ESCAPE', 'SPACE', 'DELETE', 'BACKSPACE']
+ALL_BUTTON = ['ENTER', 'TAB', 'ESCAPE', 'SPACE', 'DELETE', 'BACKSPACE']
 MACOS_URL = 'http://192.168.19.216:8086'

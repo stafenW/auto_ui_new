@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 
@@ -27,9 +28,9 @@ class Case(models.Model):
             "isRunning": self.is_running,
             "lastSucc": self.last_succ,
             "runLog": self.run_log,
-            "createTime": self.create_time,
+            "createTime": timezone.localtime(self.create_time).strftime('%Y-%m-%d %H:%M:%S'),
             "tags": str(self.tags).split(','),
-            "lastRunTime": self.last_run_time,
+            "lastRunTime": timezone.localtime(self.last_run_time).strftime('%Y-%m-%d %H:%M:%S'),
         }
 
     class Meta:
@@ -48,7 +49,7 @@ class Process(models.Model):
             "title": self.title,
             "describe": self.describe,
             "operations": [],
-            "createTime": self.create_time
+            "createTime": timezone.localtime(self.create_time).strftime('%Y-%m-%d %H:%M:%S')
         }
 
     class Meta:
@@ -137,6 +138,7 @@ class Operation(models.Model):
             }
         elif self.ope_type == "keyword-opt":
             value = {
+                "elFinder": self.get_finder(),
                 "keywordOpt": self.button
             }
         return {
