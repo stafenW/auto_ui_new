@@ -1,3 +1,4 @@
+import logging
 import os
 from datetime import datetime
 import time
@@ -8,6 +9,7 @@ import tensorflow as tf
 from env import *
 
 BASE_DIR = settings.BASE_DIR
+logger = logging.getLogger(__name__)
 
 
 class RunCodeException(Exception):
@@ -128,7 +130,7 @@ def run_case(code, options, model='chrome'):
             raise e
 
     has_error = False
-
+    logging.info(code)
     # 变量操作容器
     _VAR_OPE_RECORD_ = []
     for i in range(RETRY):
