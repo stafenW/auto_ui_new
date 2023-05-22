@@ -15,7 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 def _request_safari(tags, url, args=None, method='POST'):
+    logging.info(tags)
     if 'safari' in tags and 'Darwin' != platform.system():
+        logging.info('这个是safari的文件')
         url = MACOS_URL + url
         if method == 'POST':
             header = {'Content-Type': 'application/json'}
