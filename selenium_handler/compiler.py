@@ -168,13 +168,8 @@ def _write_input(type, val, input_val, is_enter=0):
 
 # 输入
 def _write_keyword(type=None, val=None, input_val='ENTER'):
-    if type:
-        code = f'''
-driver.send_keys(Keys.{input_val})
-        '''
-    else:
-        var_name = _get_random_var_name("input")
-        code = f'''
+    var_name = _get_random_var_name("input")
+    code = f'''
 {_find_element(var_name, type, val)}
 {var_name}.send_keys(Keys.{input_val}
         '''
@@ -316,8 +311,6 @@ def _write_code(operations):
             operation_code = _write_input(ef["findType"], es_str(ef["findVal"]), es_str(ov["inputVal"]),
                                           ov.get("isEnter"))
         elif ope_type == "keyword-opt":
-            print(ef["findType"])
-            print(es_str(ef["findVal"]))
             operation_code = _write_keyword(ef["findType"], es_str(ef["findVal"]), es_str(ov.get('keywordOpt')))
         elif ope_type == "wait":
             operation_code = _write_wait(ov["timeLimit"])
