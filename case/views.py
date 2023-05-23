@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+import asyncio
+
 from .app import *
 
 BASE_DIR = settings.BASE_DIR
@@ -119,8 +121,9 @@ def run_cases_from_tags(request):
     })
 
 
-def run_all_cases(request):
-    app_run_all_cases()
+async def run_all_cases(request):
+    loop = asyncio.get_event_loop()
+    loop.create_task(app_run_all_cases())
     return JsonResponse({
         "code": 0
     })

@@ -31,6 +31,8 @@ class Case(models.Model):
             "createTime": timezone.localtime(self.create_time).strftime('%Y-%m-%d %H:%M:%S'),
             "tags": str(self.tags).split(','),
             "lastRunTime": timezone.localtime(self.last_run_time).strftime('%Y-%m-%d %H:%M:%S'),
+            "lastErrorCount": self.last_error_count,
+            "lastCompCount": self.last_comp_count
         }
 
     class Meta:

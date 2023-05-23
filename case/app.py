@@ -176,7 +176,10 @@ def app_run_cases_from_tags(tags):
 
 def app_run_all_cases():
     cases = query_all_cases()
-    cases_id_list = [case.id for case in cases]
-    for case_id in cases_id_list:
-        t = threading.Thread(target=app_run_case, args=(case_id, 0))
+    chrome_cases_id_list = [case.id for case in cases if 'chrome' in case.tags]
+    safari_cases_id_list = [case.id for case in cases if 'safari' in case.tags]
+    for chrome_case_id in chrome_cases_id_list:
+        t = threading.Thread(target=app_run_case, args=(chrome_case_id, 0))
         t.start()
+    for safari_case_id in safari_cases_id_list:
+        app_run_case(case_id=safari_case_id)
