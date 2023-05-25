@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 import asyncio
+import threading
 
 from .app import *
 
@@ -121,9 +122,9 @@ def run_cases_from_tags(request):
     })
 
 
-async def run_all_cases(request):
-    loop = asyncio.get_event_loop()
-    loop.create_task(app_run_all_cases())
+def run_all_cases(request):
+    thread = threading.Thread(target=app_run_all_cases)
+    thread.start()
     return JsonResponse({
         "code": 0
     })

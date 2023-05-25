@@ -8,7 +8,6 @@ urlpatterns = [
     path('runCase', views.run_case),
     path('runCases', views.run_cases_from_tags),
     path('runAllCases', views.run_all_cases),
-    # path('runCases', views.run_case),
     path('delCase', views.del_case),
     path('getPic', views.get_pic),
     path('getCaseCode', views.get_case_code),
