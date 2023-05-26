@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import tensorflow as tf
 from env import *
+import html
 
 BASE_DIR = settings.BASE_DIR
 logger = logging.getLogger(__name__)
@@ -74,13 +75,13 @@ def compare_vars(ope_name, url1, url2):
 
 
 def format_str(content):
-    content = content.replace("&", "&amp;")
-    content = content.replace('"', "&quot;")
-    content = content.replace("'", "&#39;")
-    content = content.replace("<", "&lt;")
-    content = content.replace(">", "&gt;")
-    content = content.replace("/", "&#x2F;")
-    return content
+    # content = content.replace("&", "&amp;")
+    # content = content.replace('"', "&quot;")
+    # content = content.replace("'", "&#39;")
+    # content = content.replace("<", "&lt;")
+    # content = content.replace(">", "&gt;")
+    # content = content.replace("/", "&#x2F;")
+    return html.escape(content)
 
 
 def run_case(code, options, model='chrome'):

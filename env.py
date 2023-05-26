@@ -7,3 +7,4 @@ CODE_INDEX = ['import', 'chrome_options', 'driver', '.click', 'send_keys', 'time
 BASE_URL_TEST = 'http://192.168.20.34:8086'
 ALL_BUTTON = ['ENTER', 'TAB', 'ESCAPE', 'SPACE', 'DELETE', 'BACKSPACE']
 MACOS_URL = 'http://192.168.19.216:8086'
+PLATFORM_URL = 'https://autoui.w.chime.me/#/case'

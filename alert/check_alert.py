@@ -22,9 +22,13 @@ def alert_qa():
 
     alert_bot_msg = {
         "groupId": ALERT_BOT_CODE,
-        "msg": f'<div>chrome执行情况：共对比次数{chrome_check_count}，失败次数{chrome_error_time}，对比失败案例：{chrome_error_cases}</div>\n'
-               f'<div>safari执行情况：共对比次数{safari_check_count}，失败次数{safari_error_time}，对比失败案例：{safari_error_cases}</div>\n'
-               f'<a href="https://autoui.w.chime.me/#/case">ui自动化测试平台</a>'
+        "msg": f'<div style="font-size: larger; font-weight: bold;">chrome execute result: </div>\n'
+               f'<div>compare time {chrome_check_count}, error time {chrome_error_time}, '
+               f'error case {chrome_error_cases}</div>\n'
+               f'<div style="font-size: larger; font-weight: bold;">safari execute result: </div>\n'
+               f'<div>compare time {safari_check_count}, error time {safari_error_time}, '
+               f'error case {safari_error_cases}</div>\n'
+               f'<a href="{PLATFORM_URL}">Click here to enter the UI automation testing platform</a>'
     }
 
     response = requests.post(url, json=alert_bot_msg)
