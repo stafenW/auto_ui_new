@@ -157,8 +157,7 @@ def _write_input(type, val, input_val, is_enter=0):
     var_name = _get_random_var_name("input")
     code = f'''
 {_find_element(var_name, type, val)}
-{var_name}.send_keys("{input_val}"
-        '''
+{var_name}.send_keys("{input_val}"'''
     if not is_enter:
         code += ')'
     else:

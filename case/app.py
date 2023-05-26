@@ -78,7 +78,8 @@ def app_edit_case_tags(data: json):
 
 
 def app_initial_case(case_id):
-    update_case(case_id, last_succ=0, is_running=0, is_waiting=0)
+    del_file(case_id)
+    update_case(case_id, has_norm=0, last_succ=0, is_running=0, is_waiting=0)
     return True
 
 
