@@ -151,7 +151,8 @@ def app_run_case(case_id, is_debug=1):
 
     has_norm = 1 if not has_error and run_norm else case.has_norm
     last_succ = 2 if has_error or error_count else 1
-
+    logging.info(f'error_count: {error_count}')
+    logging.info(f'camp_time: {camp_time}')
     update_case_last_run_result(
         case_id,
         last_error_count=error_count,
