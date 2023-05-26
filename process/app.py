@@ -1,8 +1,11 @@
 from db_handler.handler_process import *
 
 
-def process_list():
-    processes = query_processes()
+def process_list(title):
+    if title:
+        processes = query_processes_from_title(title)
+    else:
+        processes = query_processes()
     process_dicts = []
 
     for p in processes:

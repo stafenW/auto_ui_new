@@ -33,5 +33,9 @@ def query_processes():
     return Process.objects.order_by('-create_time').all().prefetch_related('operation_set')
 
 
+def query_processes_from_title(title):
+    return Process.objects.filter(title__icontains=title).order_by('-create_time').all().prefetch_related('operation_set')
+
+
 def query_process(process_id):
     return Process.objects.get(id=process_id)

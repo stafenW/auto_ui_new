@@ -15,7 +15,8 @@ def add_process(request):
 
 
 def get_process_list(request):
-    process_dicts = process_list()
+    data = json.loads(request.body)
+    process_dicts = process_list(data.get('title'))
     return JsonResponse({
         "data": process_dicts,
         "code": 0
