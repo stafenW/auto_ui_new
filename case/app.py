@@ -3,13 +3,10 @@ import threading
 
 from django.http import HttpResponse
 
-from db_handler.handler_case import *
-from file_handler.handler_file import *
 from db_handler.handler_process import *
-from env import *
 from selenium_handler import runner
-import requests
 import logging
+from alert.check_alert import *
 
 logger = logging.getLogger(__name__)
 
@@ -185,3 +182,5 @@ def app_run_all_cases():
         t.start()
     for safari_case_id in safari_cases_id_list:
         app_run_case(case_id=safari_case_id)
+    logging.info("已跑完所有案例")
+    alert_qa()

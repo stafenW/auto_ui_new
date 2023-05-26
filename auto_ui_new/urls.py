@@ -17,12 +17,9 @@ Including another URLconf
 from django.urls import path, include
 from . import views
 from alert import check_alert
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('api/process/', include("process.urls")),
     path('api/case/', include("case.urls")),
-    path('', views.index, name='my_index'),
-    path('alert_qa/', check_alert.alert_qa)
+    path('', views.index, name='my_index')
 ]
