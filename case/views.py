@@ -1,6 +1,4 @@
 from django.http import JsonResponse
-import asyncio
-import threading
 
 from .app import *
 
