@@ -8,7 +8,7 @@ def check_result(model='chrome'):
     cases = query_all_cases_from_tag(model)
     check_count = 0
     error_time = 0
-    error_cases = [error_case.title for error_case in cases if error_case.last_succ]
+    error_cases = [error_case.title for error_case in cases if error_case.last_succ == 2]
     for case in cases:
         check_count += case.last_comp_count
         error_time += case.last_error_count
