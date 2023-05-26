@@ -63,4 +63,4 @@ def update_operations(opes, process_id):
 
 
 def query_operations(process_id):
-    return Operation.objects.filter(process_id=process_id).order_by("-process_index")
+    return Operation.objects.filter(process_id=process_id).order_by("process_index")
