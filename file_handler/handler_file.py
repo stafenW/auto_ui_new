@@ -30,4 +30,5 @@ def del_current_file(case_id):
 def mv_current_to_norm(case_id):
     norm_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}", 'norm')
     cur_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}", 'current')
-    shutil.move(cur_file_path, norm_file_path)
+    shutil.rmtree(norm_file_path)
+    os.rename(cur_file_path, norm_file_path)

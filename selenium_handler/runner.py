@@ -135,7 +135,6 @@ def run_case(code, options, model='chrome'):
             exec(code)
             break
         except Exception as e:
-            driver.quit()
             logging.info(e)
             append_log(
                 "ignore-error",
