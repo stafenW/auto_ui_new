@@ -117,9 +117,17 @@ driver.get("{url}")
 
 
 # jump
-def _write_jump_page(url):
+def _write_jump_page():
     code = f'''
-driver.get("{url}")
+current_handle = driver.current_window_handle
+all_handles = driver.window_handles
+new_handle = None
+for handle in all_handles:
+    if handle != current_handle:
+        new_handle = handle
+        break
+driver.switch_to.window(new_handle)
+
         '''
     return code
 
@@ -301,7 +309,7 @@ def _write_code(operations):
         if ope_type == "open-page":
             operation_code = _write_open_page(es_str(ov["url"]))
         elif ope_type == "jump":
-            operation_code = _write_jump_page(es_str(ov["url"]))
+            operation_code = _write_jump_page()
         elif ope_type == "click":
             operation_code = _write_click(ef["findType"], es_str(ef["findVal"]))
         elif ope_type == "try-to-click":
