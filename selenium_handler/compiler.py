@@ -127,6 +127,7 @@ for handle in all_handles:
         new_handle = handle
         break
 driver.switch_to.window(new_handle)
+driver.set_window_size(1920, 1280)
 
         '''
     return code
