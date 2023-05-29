@@ -276,7 +276,7 @@ def _write_try_catch(code, ope_type, ope_name):
     code = "    " + code.replace("\n", "\n    ")
     time_log_name = _get_random_var_name("time_log")
     code = f'''
-try :
+try:
     {time_log_name} = {{
         "opeType": "{ope_type}",
         "opeName": "{ope_name}",
@@ -287,6 +287,7 @@ try :
     {time_log_name}["type"] = "end"
     _TIME_LOGGER_({time_log_name})
 except Exception as e:
+    driver.quit()
     _ERROR_LOGGER_(e, {{
         "opeType": "{ope_type}",
         "opeName": "{ope_name}",
