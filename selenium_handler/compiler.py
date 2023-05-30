@@ -66,14 +66,11 @@ from selenium.webdriver.safari.options import Options
 from xvfbwrapper import Xvfb
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import base64
 import time
 import os
 
-safari_options = Options()
-safari_options.add_argument('--incognito')
-driver = webdriver.Safari(options=safari_options)
-driver.implicitly_wait(10)
+driver = webdriver.Safari()
+driver.implicitly_wait(30)
 driver.set_window_size(1920, 1280)
     '''
     return code
