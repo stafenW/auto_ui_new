@@ -3,7 +3,6 @@ import threading
 
 from django.http import HttpResponse
 
-from db_handler.handler_process import *
 from selenium_handler import runner
 import logging
 from alert.check_alert import *
