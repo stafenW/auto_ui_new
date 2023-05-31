@@ -8,6 +8,7 @@ import numpy as np
 import tensorflow as tf
 from env import *
 import html
+import subprocess
 
 BASE_DIR = settings.BASE_DIR
 logger = logging.getLogger(__name__)
@@ -142,6 +143,9 @@ def run_case(code, options, model='chrome'):
             )
             time.sleep(5)
     else:
+        command = "ps -ef | grep safari ｜ grep -v grep | awk '{print $2}' | xargs kill -9"
+        subprocess.run(command, shell=True)
+
         has_error = True
         append_log(
             "error",

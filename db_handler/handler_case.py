@@ -1,9 +1,9 @@
 from .models import Case
 import json
 from selenium_handler import compiler
-from datetime import datetime
 from django.utils import timezone
 from file_handler.handler_file import *
+from .handler_operation import *
 
 
 def add_new_case(case: json, model='chrome'):
@@ -69,3 +69,17 @@ def query_all_cases_values(*args):
 def get_cases_from_tags(tags):
     cases = query_all_cases()
     return [case for case in cases if any(tag in tags for tag in case.tags.split(','))]
+
+
+def query_all_cases_from_relation_process_id(id):
+    def find_process_ids_recursive(process_id, result):
+        operations = Operation.objects.filter(other_process=process_id)
+        for operation in operations:
+            result.append(operation.process_id_id)
+            find_process_ids_recursive(operation.process_id_id, result)
+
+    result = []
+    find_process_ids_recursive(id, result)
+    result = list(set(result))
+
+    return Case.objects.filter(process_id__in=result)

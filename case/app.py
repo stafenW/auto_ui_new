@@ -54,7 +54,10 @@ def app_update_case_code(case_id=None, process_id=None):
         update_case(case_id, last_succ=0, has_norm=0, code=code, operations=operations)
         return True
     if process_id:
-        cases = query_all_cases_from_process_id(process_id)
+        cases_1 = query_all_cases_from_process_id(process_id)
+        cases_2 = query_all_cases_from_relation_process_id(process_id)
+        cases = cases_1.union(cases_2)
+
         for case_id in cases.values_list("id", flat=True):
             app_update_case_code(case_id=case_id)
 
@@ -123,7 +126,7 @@ def app_get_picture(file_url, model):
 
 def app_run_case(case_id, is_debug=1):
     case = query_case_from_case_id(case_id)
-    if _request_safari(case.tags, '/api/case/runCase', args={'caseId': case_id, 'debug': is_debug}):  # 这里需要修改
+    if _request_safari(case.tags, '/api/case/runCase', args={'caseId': case_id, 'debug': is_debug}):
         return True
 
     if 'chrome' in case.tags:
