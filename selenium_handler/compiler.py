@@ -284,7 +284,6 @@ try:
     {time_log_name}["type"] = "end"
     _TIME_LOGGER_({time_log_name})
 except Exception as e:
-    driver.quit()
     _ERROR_LOGGER_(e, {{
         "opeType": "{ope_type}",
         "opeName": "{ope_name}",
