@@ -57,3 +57,4 @@ Werkzeug==2.3.4
 wrapt==1.14.1
 wsproto==1.2.0
 cryptography==40.0.2
+psutil~=5.9.5
