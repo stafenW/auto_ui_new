@@ -8,3 +8,4 @@ BASE_URL_TEST = 'http://192.168.20.34:8086'
 ALL_BUTTON = ['ENTER', 'TAB', 'ESCAPE', 'SPACE', 'DELETE', 'BACKSPACE']
 MACOS_URL = 'http://192.168.19.216:8086'
 PLATFORM_URL = 'https://autoui.w.chime.me/#/case'
+CHROME_THREADING = 5

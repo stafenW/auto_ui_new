@@ -25,14 +25,14 @@ def _request_safari(tags, url, args=None, method='POST'):
 
 
 def _run_chrome_case(case_list):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=CHROME_THREADING) as executor:
         futures = []
 
         for case_id in case_list:
             future = executor.submit(app_run_case, case_id, 0)
             futures.append(future)
 
-            if len(futures) == 10:
+            if len(futures) == CHROME_THREADING:
                 concurrent.futures.wait(futures)
                 futures = []
 
