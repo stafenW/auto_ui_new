@@ -135,6 +135,10 @@ def run_case(code, options, model='chrome'):
             # run code
             exec(code)
             break
+        except TimeoutError as e:
+            for proc in psutil.process_iter(['pid', 'name']):
+                if proc.info['name'] == 'safaridriver':
+                    proc.kill()
         except Exception as e:
             logging.error('---------------------------------------')
             logging.error(options['caseId'])
