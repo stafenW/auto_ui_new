@@ -1,5 +1,6 @@
 import platform
 import threading
+import concurrent.futures
 
 from django.http import HttpResponse
 
@@ -141,6 +142,7 @@ def app_run_case(case_id, is_debug=1):
         code=case.code,
         model=model,
         options={
+            "caseId": case_id,
             "caseFilePath": case_file_path,
             "runNorm": run_norm
         }
@@ -173,13 +175,28 @@ def app_run_cases_from_tags(tags):
         t.start()
 
 
+def _run_chrome_case(case_list):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = []
+
+        for case_id in case_list:
+            future = executor.submit(app_run_case, case_id, 0)
+            futures.append(future)
+
+            if len(futures) == 10:
+                concurrent.futures.wait(futures)
+                futures = []
+
+        concurrent.futures.wait(futures)
+
+
 def app_run_all_cases():
     cases = query_all_cases()
     chrome_cases_id_list = [case.id for case in cases if 'chrome' in case.tags]
     safari_cases_id_list = [case.id for case in cases if 'safari' in case.tags]
-    for chrome_case_id in chrome_cases_id_list:
-        t = threading.Thread(target=app_run_case, args=(chrome_case_id, 0))
-        t.start()
+    thread = threading.Thread(target=_run_chrome_case, args=(chrome_cases_id_list,))
+    thread.start()
+
     for safari_case_id in safari_cases_id_list:
         app_run_case(case_id=safari_case_id)
     logging.info("已跑完所有案例")
