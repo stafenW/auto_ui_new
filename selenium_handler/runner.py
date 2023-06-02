@@ -147,7 +147,7 @@ def run_case(code, options, model='chrome'):
             time.sleep(5)
     else:
         for proc in psutil.process_iter(['pid', 'name']):
-            if proc.info['name'] == 'safari':
+            if proc.info['name'] == 'safaridriver':
                 proc.kill()
 
         has_error = True
