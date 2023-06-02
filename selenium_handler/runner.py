@@ -136,7 +136,8 @@ def run_case(code, options, model='chrome'):
             exec(code)
             break
         except Exception as e:
-            logging.info(options['caseId'], e)
+            logging.error(options['caseId'])
+            logging.error(e)
             append_log(
                 "ignore-error",
                 f"retry {i + 1} end"

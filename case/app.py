@@ -24,6 +24,21 @@ def _request_safari(tags, url, args=None, method='POST'):
     return False
 
 
+def _run_chrome_case(case_list):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = []
+
+        for case_id in case_list:
+            future = executor.submit(app_run_case, case_id, 0)
+            futures.append(future)
+
+            if len(futures) == 10:
+                concurrent.futures.wait(futures)
+                futures = []
+
+        concurrent.futures.wait(futures)
+
+
 def app_add_new_cases(data):
     for case in data:
         add_new_case(case, model='chrome')
@@ -173,21 +188,6 @@ def app_run_cases_from_tags(tags):
     for case_id in cases_id_list:
         t = threading.Thread(target=app_run_case, args=(case_id, 0))
         t.start()
-
-
-def _run_chrome_case(case_list):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        futures = []
-
-        for case_id in case_list:
-            future = executor.submit(app_run_case, case_id, 0)
-            futures.append(future)
-
-            if len(futures) == 10:
-                concurrent.futures.wait(futures)
-                futures = []
-
-        concurrent.futures.wait(futures)
 
 
 def app_run_all_cases():
