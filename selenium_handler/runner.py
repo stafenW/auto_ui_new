@@ -112,7 +112,7 @@ def run_case(code, options, model='chrome'):
             append_log("end", "end")
 
     # code内使用的错误日志函数
-    def _ERROR_LOGGER_(e, options):
+    def _ERROR_LOGGER_(driver, e, options):
         if options.get("ignoreError"):
             append_log(
                 "ignore-error",
@@ -123,6 +123,7 @@ def run_case(code, options, model='chrome'):
                 "error",
                 f'{get_curr_time_str()} Run "{options["opeName"]}" failed with reason:{repr(e)}'
             )
+            driver.quit()
             raise e
 
     has_error = False
@@ -135,10 +136,6 @@ def run_case(code, options, model='chrome'):
             # run code
             exec(code)
             break
-        except TimeoutError as e:
-            for proc in psutil.process_iter(['pid', 'name']):
-                if proc.info['name'] == 'safaridriver':
-                    proc.kill()
         except Exception as e:
             logging.error('---------------------------------------')
             logging.error(options['caseId'])
@@ -150,10 +147,6 @@ def run_case(code, options, model='chrome'):
             )
             time.sleep(5)
     else:
-        for proc in psutil.process_iter(['pid', 'name']):
-            if proc.info['name'] == 'safaridriver':
-                proc.kill()
-
         has_error = True
         append_log(
             "error",

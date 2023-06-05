@@ -284,7 +284,7 @@ try:
     {time_log_name}["type"] = "end"
     _TIME_LOGGER_({time_log_name})
 except Exception as e:
-    _ERROR_LOGGER_(e, {{
+    _ERROR_LOGGER_(driver, e, {{
         "opeType": "{ope_type}",
         "opeName": "{ope_name}",
         "ignoreError": {ope_type == "try-to-click"}
