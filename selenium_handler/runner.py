@@ -8,7 +8,6 @@ import numpy as np
 import tensorflow as tf
 from env import *
 import html
-import psutil
 
 BASE_DIR = settings.BASE_DIR
 logger = logging.getLogger(__name__)
@@ -29,7 +28,7 @@ def get_curr_time_str():
 
 def get_var_info(ope_name, url, model='chrome'):
     if ope_name == "get-text":
-        url = os.path.join(BASE_DIR, "../", url)
+        url = os.path.join(BASE_DIR, url)
         with open(url, "r") as f:
             content = f.read()
             content = f'''
@@ -124,7 +123,8 @@ def run_case(code, options, model='chrome'):
                 f'{get_curr_time_str()} Run "{options["opeName"]}" failed with reason:{repr(e)}'
             )
             driver.quit()
-            raise e
+            logging.error(e)
+            raise
 
     has_error = False
     # 变量操作容器

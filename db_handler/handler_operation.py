@@ -40,6 +40,7 @@ def add_operation(ope, index, process_id):
     elif ope_type == "get-text":
         new_ope.set_finder(value.get("elFinder"))
         new_ope.set_var_ope(value.get("varOpe"))
+        new_ope.set_comp_var(value.get("compVar"))
     elif ope_type == "other-process":
         new_ope.set_other_process(value.get("otherProcessId"))
     elif ope_type == "keyword-opt":

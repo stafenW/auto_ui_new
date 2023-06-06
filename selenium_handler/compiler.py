@@ -192,6 +192,29 @@ driver.save_screenshot({img_file_path_var})
     return code, img_file_path_var
 
 
+# 获取文本信息
+def _get_text(type, val, var_ope):
+    el_var_name = _get_random_var_name("el")
+    text_var_name = _get_random_var_name("text") + ".txt"
+    text_file_path_var = _get_random_var_name("text_file_path")
+    code = f"""
+{_find_element(el_var_name, type, val)}
+    """
+    if var_ope.get('option') in ['compare', 'showInResult']:
+        code += f'''
+{text_file_path_var} = os.path.join(_FIlE_PATH, "{text_var_name}")
+with open({text_file_path_var}, "w") as f:
+    f.write({el_var_name}.text)
+        '''
+    elif var_ope.get('option') == 'compText':
+        code = f'''
+if {var_ope.get('Text')} != {el_var_name}.text:
+    raise ValueError('预期文案:{var_ope.get('Text')}，实际文案:{el_var_name}.text')
+        '''
+
+    return code, text_file_path_var
+
+
 # 给某个元素截图
 def _write_snapshot_el(type, val):
     el_var_name = _get_random_var_name("el")
@@ -223,29 +246,6 @@ def _write_wait_el(type, val, time_limit):
 WebDriverWait(driver, timeout={time_limit}).until(lambda d: d.find_element({_get_by_selector(type)},'{val}'))
     '''
     return code
-
-
-# 获取文本信息
-def _get_text(type, val, var_ope):
-    el_var_name = _get_random_var_name("el")
-    text_var_name = _get_random_var_name("text") + ".txt"
-    text_file_path_var = _get_random_var_name("text_file_path")
-    code = f"""
-{_find_element(el_var_name, type, val)}
-    """
-    if var_ope.get('option') in ['compare', 'showInResult']:
-        code += f'''
-{text_file_path_var} = os.path.join(_FIlE_PATH, "{text_var_name}")
-with open({text_file_path_var}, "w") as f:
-    f.write({el_var_name}.text)
-        '''
-    elif var_ope.get('option') == 'compText':
-        code = f'''
-if {var_ope.get('Text')} != {el_var_name}.text:
-    raise ValueError('预期文案:{var_ope.get('Text')}，实际文案:{el_var_name}.text')
-        '''
-
-    return code, text_file_path_var
 
 
 # 处理code格式
