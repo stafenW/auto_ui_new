@@ -189,7 +189,7 @@ def run_case(code, options, model='chrome'):
                     </div>
                     <div class="compare-result-">
                         <div>Compare Result:</div>
-                        <div class="ans">{compare_result}</div>
+                        <div class="ans" error_tag={compare_status}>{compare_result}</div>
                     </div>
                 ''')
 

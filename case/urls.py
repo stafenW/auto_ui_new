@@ -15,5 +15,5 @@ urlpatterns = [
     path('updateCaseFromC', views.update_case_code_from_cases),
     path('updateCaseFromP', views.update_case_code_from_process),
     path('editCaseTag', views.edit_case_tag),
-    path('initialCase', views.case_initial)
+    path('initialCase', views.case_initial),
 ]

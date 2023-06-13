@@ -59,7 +59,7 @@ def app_update_case_code(case_id=None, process_id=None):
         case = query_case_from_case_id(case_id=case_id)
         dic = {"operations": [ope.to_dict() for ope in query_operations(case.process_id)]}
         operations = json.dumps(dic["operations"])
-        del_file(case_id)
+        del_snapshot_direct(case_id)
         if 'safari' in case.tags.split(','):
             code = compiler.compile_code(dic["operations"], 'safari')
         elif 'firefox' in case.tags.split(','):
@@ -81,7 +81,7 @@ def app_update_norm_file(case_id):
     case = query_case_from_case_id(case_id)
     if _request_safari(case.tags, '/api/case/updateNorm', {'caseId': case_id}):
         return True
-    mv_current_to_norm(case_id)
+    snapshot_file_mv_current_to_norm(case_id)
     return True
 
 
@@ -93,7 +93,7 @@ def app_edit_case_tags(data: json):
 
 
 def app_initial_case(case_id):
-    del_file(case_id)
+    del_snapshot_direct(case_id)
     update_case(case_id, has_norm=0, last_succ=0, is_running=0, is_waiting=0, run_log='')
     return True
 

@@ -17,12 +17,12 @@ def add_new_case(case: json, model='chrome'):
         create_time=now.strftime("%Y-%m-%d %H:%M:%S")
     )
     new_case.save()
-    add_file(new_case.id)
+    add_snapshot_direct(new_case.id)
 
 
 def delete_case(case_id):
     Case.objects.get(id=case_id).delete()
-    del_file(case_id)
+    del_snapshot_direct(case_id)
 
 
 def update_case(case_id, **kwargs):

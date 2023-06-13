@@ -1,10 +1,12 @@
 from django.utils import timezone
 from django.db import models
+from PIL import Image as PILImage
+from io import BytesIO
 
 
 class Case(models.Model):
     process_id = models.IntegerField()
-    title = models.CharField(max_length=200, null=True, blank=True)
+    title = models.CharField(max_length=200)
     code = models.TextField()
     operations = models.TextField()
     has_norm = models.IntegerField(default=0)
@@ -183,3 +185,49 @@ class Operation(models.Model):
 
     class Meta:
         db_table = "operation"
+
+
+class ProcessTag(models.Model):
+    tag_name = models.CharField(max_length=30, unique=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "tagName": self.tag_name
+        }
+
+    class Meta:
+        db_table = 'process_tag'
+
+
+class TagRelation(models.Model):
+    tag_ids = models.ForeignKey(to=ProcessTag, on_delete=models.CASCADE)
+    process_id = models.ForeignKey(to=Process, on_delete=models.CASCADE)
+
+    def to_dict(self):
+        return {
+            "tagId": self.tag_ids,
+            "processId": self.process_id
+        }
+
+    class Meta:
+        db_table = 'process_relation_tag'
+
+
+class Image(models.Model):
+    process = models.ForeignKey(Process, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='process_images/')
+    thumbnail = models.ImageField(upload_to='process_images/thumbnails/', blank=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.thumbnail:
+            self.create_thumbnail()
+
+    def create_thumbnail(self):
+        size = (288, 168)
+        image = PILImage.open(self.image)
+        image.thumbnail(size)
+        thumbnail_bytes = BytesIO()
+        image.save(thumbnail_bytes, 'JPEG')
+        self.thumbnail.save(f'{self.image.name}_thumbnail.jpg', thumbnail_bytes, save=False)

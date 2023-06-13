@@ -47,20 +47,24 @@ def add_operation(ope, index, process_id):
         new_ope.set_finder(value.get("elFinder"))
         new_ope.set_keyword_opt(value.get('keywordOpt'))
     new_ope.save()
+    return True
 
 
 def add_operations(opes, process_id):
     for index, ope in enumerate(opes):
         add_operation(ope, index, process_id)
+    return True
 
 
 def del_operations(process_id):
     Operation.objects.filter(process_id=process_id).delete()
+    return True
 
 
 def update_operations(opes, process_id):
     del_operations(process_id)
     add_operations(opes, process_id)
+    return True
 
 
 def query_operations(process_id):

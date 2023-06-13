@@ -1,19 +1,15 @@
 from .handler_operation import *
-from datetime import datetime
 
 
-def add_process_ope(process):
-    now = datetime.now()
+def add_process_ope(title, describe, create_time):
     new_process = Process(
-        title=process.get("title"),
-        describe=process.get("describe"),
-        create_time=now.strftime("%Y-%m-%d %H:%M:%S")
+        title=title,
+        describe=describe,
+        create_time=create_time
     )
     new_process.save()
 
-    opes = process.get("operations")
-    add_operations(opes, new_process.id)
-    return new_process.to_dict()
+    return new_process.id
 
 
 def del_process_ope(process_id):
@@ -40,3 +36,7 @@ def query_processes_from_title(title):
 
 def query_process(process_id):
     return Process.objects.get(id=process_id)
+
+
+def query_process_from_filter(**kwargs):
+    return Process.objects.filter(**kwargs).order_by('-create_time').all().prefetch_related('operation_set')
