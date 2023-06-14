@@ -9,6 +9,8 @@ from db_handler.handler_process_relation_img import *
 from file_handler.handler_file import *
 import json
 
+MEDIA_ROOT = settings.MEDIA_ROOT
+
 
 def app_add_process_and_operation(process, image_data):
     title = process.get("title")
@@ -73,7 +75,9 @@ def app_process_list(title='', tag_ids=None):
     for process in process_list:
         process_dict = process.to_dict()
         process_dict["operations"] = [ope.to_dict() for ope in process.operation_set.all()]
-        process_dict["fileUrl"] = 'api/process/' + query_thumbnail_path(process)
+        if query_thumbnail_path(process.id):
+            process_dict["thumbnailUrl"] = query_thumbnail_path(process.id)
+            process_dict["imageUrl"] = query_img_path(process.id)
         process_dicts.append(process_dict)
     return process_dicts
 
@@ -82,7 +86,9 @@ def app_process_detail(process_id):
     process = query_process(process_id)
     process_dict = process.to_dict()
     process_dict["operations"] = [ope.to_dict() for ope in query_operations(process_id)]
-    process_dict["fileUrl"] = 'api/process/' + query_thumbnail_path(process)
+    if query_thumbnail_path(process.id):
+        process_dict["thumbnailUrl"] = query_thumbnail_path(process.id)
+        process_dict["imageUrl"] = query_img_path(process.id)
     return process_dict
 
 
@@ -108,18 +114,11 @@ def app_process_tags_list():
     return tag_list
 
 
-def app_process_img(process_id):
-    img_path = get_process_description_img_path(process_id)
-    with open(img_path, 'rb') as f:
-        image_data = f.read()
-    response = HttpResponse(image_data, content_type='image/jpeg')
-    response['Content-Disposition'] = 'inline'
-    return response
-
-
-def app_process_thumbnail(file_url):
-    thumbnail_path = os.path.join(MEDIA_ROOT, file_url)
-    with open(thumbnail_path, 'rb') as f:
+def app_get_process_pic(file_url):
+    if file_url.startswith('/'):
+        file_url = file_url[1:]
+    file_url = os.path.join(MEDIA_ROOT, file_url)
+    with open(file_url, 'rb') as f:
         image_data = f.read()
     response = HttpResponse(image_data, content_type='image/jpeg')
     response['Content-Disposition'] = 'inline'

@@ -22,8 +22,14 @@ def update_process_description_img(process_id, image_data):
 
 
 def query_img_path(process_id):
-    return Image.objects.get(process_id).values_list('image')
+    try:
+        return Image.objects.get(process=process_id).image.url
+    except Image.DoesNotExist:
+        return False
 
 
 def query_thumbnail_path(process_id):
-    return Image.objects.get(process_id).values_list('thumbnail')
+    try:
+        return Image.objects.get(process=process_id).thumbnail.url
+    except Image.DoesNotExist:
+        return False

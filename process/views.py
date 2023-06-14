@@ -101,13 +101,8 @@ def get_keyword_list(request):
     return JsonResponse(ALL_BUTTON, safe=False)
 
 
-def get_process_img(request):
-    data = json.loads(request.body)
-    return app_process_img(data.get('processId'))
-
-
-def get_process_thumbnail(request):
+def get_process_pic(request):
     file_url = request.GET.get('fileUrl', '')
     if file_url == "":
         return HttpResponse("need param 'fileUrl'")
-    return app_process_thumbnail(file_url)
+    return app_get_process_pic(file_url)

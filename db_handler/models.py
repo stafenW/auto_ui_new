@@ -235,7 +235,7 @@ class Image(models.Model):
     def create_thumbnail(self):
         image_type = self.image.name.split(".")[1]
         thumbnail_name = f'{self.image.name.split(".")[0]}_thumbnail.{image_type}'
-        size = (288, 168)
+        size = (144, 84)
         image = PILImage.open(self.image)
         image.thumbnail(size)
         thumbnail_bytes = BytesIO()
