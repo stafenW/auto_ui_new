@@ -9,7 +9,7 @@ build:
   only:
     - /^branch\/[\S]+/
   variables:
-    VERSION: "v10.0"
+    VERSION: "v11.0"
   script:
     - docker build -f Dockerfile -t harbor.w.chime.me/crm/auto-ui:$VERSION .
     - docker rm -f auto-ui || true
