@@ -1,5 +1,3 @@
-import json
-
 from django.http import JsonResponse
 from env import *
 from .app import *
@@ -7,8 +5,9 @@ from .app import *
 
 # 下面接口是操作process
 def add_process(request):
-    data = json.loads(request.body)
-    new_process_dict = app_add_process_and_operation(data)
+    data = request.POST.copy()
+    image_data = request.FILES.get('image')
+    new_process_dict = app_add_process_and_operation(data, image_data)
     return JsonResponse({
         "data": new_process_dict,
         "code": 0
@@ -25,8 +24,9 @@ def delete_process(request):
 
 
 def update_process(request):
-    data = json.loads(request.body)
-    new_process_dict = app_update_process_and_operation_and_relation(data)
+    data = request.POST.copy()
+    image_data = request.FILES.get('image')
+    new_process_dict = app_update_process_and_operation_and_relation(data, image_data)
     return JsonResponse({
         "data": new_process_dict,
         "code": 0
@@ -99,3 +99,15 @@ def get_tag_list(request):
 
 def get_keyword_list(request):
     return JsonResponse(ALL_BUTTON, safe=False)
+
+
+def get_process_img(request):
+    data = json.loads(request.body)
+    return app_process_img(data.get('processId'))
+
+
+def get_process_thumbnail(request):
+    file_url = request.GET.get('fileUrl', '')
+    if file_url == "":
+        return HttpResponse("need param 'fileUrl'")
+    return app_process_thumbnail(file_url)

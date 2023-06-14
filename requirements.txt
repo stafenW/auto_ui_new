@@ -77,3 +77,5 @@ wrapt==1.14.1
 wsproto==1.2.0
 xvfbwrapper==0.2.9
 zope.interface==6.0
+
+Pillow~=9.5.0

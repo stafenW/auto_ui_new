@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.db import models
+import os
 from PIL import Image as PILImage
 from io import BytesIO
 
@@ -214,10 +215,17 @@ class TagRelation(models.Model):
         db_table = 'process_relation_tag'
 
 
+def generate_image_upload_path(instance, filename):
+    # 根据 process_id 生成对应的上传路径
+    process_id = instance.process_id
+    upload_dir = f'process_images/{process_id}/'
+    return os.path.join(upload_dir, filename)
+
+
 class Image(models.Model):
     process = models.ForeignKey(Process, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='process_images/')
-    thumbnail = models.ImageField(upload_to='process_images/thumbnails/', blank=True)
+    image = models.ImageField(upload_to=generate_image_upload_path)
+    thumbnail = models.ImageField(blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -225,9 +233,15 @@ class Image(models.Model):
             self.create_thumbnail()
 
     def create_thumbnail(self):
+        image_type = self.image.name.split(".")[1]
+        thumbnail_name = f'{self.image.name.split(".")[0]}_thumbnail.{image_type}'
         size = (288, 168)
         image = PILImage.open(self.image)
         image.thumbnail(size)
         thumbnail_bytes = BytesIO()
-        image.save(thumbnail_bytes, 'JPEG')
-        self.thumbnail.save(f'{self.image.name}_thumbnail.jpg', thumbnail_bytes, save=False)
+        image.save(thumbnail_bytes, image_type.upper())
+        self.thumbnail.save(thumbnail_name, thumbnail_bytes, save=False)
+        self.save()
+
+    class Meta:
+        db_table = "process_relation_img"

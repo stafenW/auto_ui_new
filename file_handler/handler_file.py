@@ -2,8 +2,10 @@ import os
 import shutil
 
 from django.conf import settings
+from db_handler.handler_process_relation_img import query_img_path, query_thumbnail_path
 
 BASE_DIR = settings.BASE_DIR
+MEDIA_ROOT = settings.MEDIA_ROOT
 
 
 def add_snapshot_direct(case_id):
@@ -40,8 +42,14 @@ def add_process_description_img_direct(process_id):
 
 
 def delete_process_description_img_direct(process_id):
-    process_file_path = os.path.join(BASE_DIR, "description", f"process-{process_id}")
+    process_file_path = os.path.join(BASE_DIR, "media", "process_images", str(process_id))
     if os.path.isdir(process_file_path):
         shutil.rmtree(process_file_path)
 
 
+def get_process_description_img_path(process_id):
+    return os.path.join(MEDIA_ROOT, query_img_path(process_id=process_id))
+
+
+def get_process_description_thumbnail_path(process_id):
+    return os.path.join(MEDIA_ROOT, query_thumbnail_path(process_id=process_id))

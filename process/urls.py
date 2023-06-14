@@ -13,5 +13,7 @@ urlpatterns = [
     path('delProcessTag', views.del_process_tag),
     path('editProcessTag', views.edit_process_tag),
     path('getProcessTag', views.get_process_tag),
-    path('updateProcessTagRelation', views.update_process_tag_relation)
+    path('updateProcessTagRelation', views.update_process_tag_relation),
+    path('getProcessImg', views.get_process_img),
+    path('getProcessThumbnail', views.get_process_thumbnail)
 ]
