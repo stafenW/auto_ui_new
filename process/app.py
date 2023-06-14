@@ -19,8 +19,7 @@ def app_add_process_and_operation(process, image_data):
     tag_list = process.get("tagIds")
 
     now = datetime.now()
-    create_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    new_process_id = add_process_ope(title, describe, create_time)
+    new_process_id = add_process_ope(title, describe, now.strftime("%Y-%m-%d %H:%M:%S"))
     if ope_list:
         ope_list = json.loads(ope_list)
         add_operations(ope_list, new_process_id)

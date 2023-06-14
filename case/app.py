@@ -161,6 +161,7 @@ def app_run_case(case_id, is_debug=1):
             "runNorm": run_norm
         }
     )
+    now = datetime.now()
 
     has_norm = 1 if not has_error and run_norm else case.has_norm
     last_succ = 2 if has_error or error_count else 1
@@ -171,11 +172,11 @@ def app_run_case(case_id, is_debug=1):
         last_error_count=error_count,
         last_comp_count=camp_time,
     )
-
     update_case(
         case_id,
         has_norm=has_norm,
         last_succ=last_succ,
+        last_run_time=now.strftime("%Y-%m-%d %H:%M:%S"),
         run_log=run_log,
         is_running=0
     )
