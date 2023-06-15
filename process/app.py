@@ -40,8 +40,8 @@ def app_update_process_and_operation_and_relation(process, image_data):
     process_id = process.get("id")
     process_title = process.get("title")
     process_description = process.get("describe")
-    process_operation_list = process.get("operations")
-    process_tag_list = process.get("tagIds")
+    process_operation_list = json.loads(process.get("operations"))
+    process_tag_list = json.loads(process.get("tagIds"))
 
     update_process_descript(process_id, title=process_title, describe=process_description)
     update_operations(process_operation_list, process_id)
