@@ -16,4 +16,5 @@ urlpatterns = [
     path('updateCaseFromP', views.update_case_code_from_process),
     path('editCaseTag', views.edit_case_tag),
     path('initialCase', views.case_initial),
+    path('getLowestSML', views.get_lowest_similarity)
 ]

@@ -1,5 +1,4 @@
 import os.path
-import time
 
 from django.http import HttpResponse
 
@@ -81,7 +80,6 @@ def app_process_list(title='', tag_ids=None):
     for process in process_list:
         process_dict = process.to_dict()
         img_path, thumbnail_path = pic_path_dict.get(process.id, (False, False))
-
         if img_path:
             process_dict["thumbnailUrl"] = thumbnail_path
             process_dict["imageUrl"] = img_path

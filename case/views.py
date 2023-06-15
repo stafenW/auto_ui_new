@@ -126,3 +126,10 @@ def run_all_cases(request):
     return JsonResponse({
         "code": 0
     })
+
+
+def get_lowest_similarity(request):
+    return JsonResponse({
+        "lowestSML": LOWEST_SIMILARITY,
+        "code": 0
+    })
