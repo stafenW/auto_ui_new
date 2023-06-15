@@ -71,7 +71,7 @@ def get_case_list(request):
         case_list = app_get_all_case()
 
     return JsonResponse({
-        "data": [case.to_dict() for case in case_list],
+        "data": [case.to_list_dict() for case in case_list],
         "code": 0
     })
 

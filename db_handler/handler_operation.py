@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.db.models import Count
+
 from .models import Operation
 from .models import Process
 
@@ -69,3 +71,15 @@ def update_operations(opes, process_id):
 
 def query_operations(process_id):
     return Operation.objects.filter(process_id=process_id).order_by("process_index")
+
+
+def query_operations_count(process_id):
+    return Operation.objects.filter(process_id=process_id).count()
+
+
+def query_operations_count_to_dict(process_ids):
+    operation_counts = Operation.objects.filter(process_id__in=process_ids).values('process_id').annotate(
+        count=Count('id'))
+    count_dict = {item['process_id']: item['count'] for item in operation_counts}
+
+    return count_dict

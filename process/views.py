@@ -54,28 +54,25 @@ def get_process_detail(request):
 # 下面接口是操作process的tag
 def add_process_tag(request):
     data = json.loads(request.body)
-    app_process_tag_addition(data.get('tagName'))
     return JsonResponse({
-        "data": app_process_tags_list(),
-        "code": 0
+        "code": app_process_tag_addition(data.get('tagName')),
+        "data": app_process_tags_list()
     })
 
 
 def del_process_tag(request):
     data = json.loads(request.body)
-    app_process_tag_delete(data.get('tagId'))
     return JsonResponse({
-        "data": app_process_tags_list(),
-        "code": 0
+        "code": app_process_tag_delete(data.get('tagId')),
+        "data": app_process_tags_list()
     })
 
 
 def edit_process_tag(request):
     data = json.loads(request.body)
-    app_process_tag_upgrade(data.get('tagId'), data.get('tagName'))
     return JsonResponse({
-        "data": app_process_tags_list(),
-        "code": 0
+        "code": app_process_tag_upgrade(data.get('tagId'), data.get('tagName')),
+        "data": app_process_tags_list()
     })
 
 
@@ -90,6 +87,9 @@ def get_process_tag(request):
 def update_process_tag_relation(request):
     data = json.loads(request.body)
     app_update_process_tag_relation(data.get('processId'), data.get('tagIds'))
+    return JsonResponse({
+        "code": 0
+    })
 
 
 # 其他接口

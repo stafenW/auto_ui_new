@@ -1,4 +1,5 @@
 import os.path
+import time
 
 from django.http import HttpResponse
 
@@ -24,7 +25,7 @@ def app_add_process_and_operation(process, image_data):
         ope_list = json.loads(ope_list)
         add_operations(ope_list, new_process_id)
     if tag_list:
-        add_relates(tag_list, new_process_id)
+        add_relates(json.loads(tag_list), new_process_id)
     if image_data:
         add_process_description_img(new_process_id, image_data)
 
@@ -71,12 +72,21 @@ def app_process_list(title='', tag_ids=None):
         process_list = query_process_from_filter()
 
     process_dicts = []
+
+    process_ids = [process.id for process in process_list]
+    pic_path_dict = query_pic_paths_to_dict(process_ids)
+    operations_count_dict = query_operations_count_to_dict(process_ids)
+    tags_dict = query_tags_of_processes_to_dict(process_ids)
+
     for process in process_list:
         process_dict = process.to_dict()
-        process_dict["operations"] = [ope.to_dict() for ope in process.operation_set.all()]
-        if query_thumbnail_path(process.id):
-            process_dict["thumbnailUrl"] = query_thumbnail_path(process.id)
-            process_dict["imageUrl"] = query_img_path(process.id)
+        img_path, thumbnail_path = pic_path_dict.get(process.id, (False, False))
+
+        if img_path:
+            process_dict["thumbnailUrl"] = thumbnail_path
+            process_dict["imageUrl"] = img_path
+        process_dict["tag"] = tags_dict.get(process.id, [])
+        process_dict["step"] = operations_count_dict.get(process.id, 0)
         process_dicts.append(process_dict)
     return process_dicts
 
@@ -85,25 +95,24 @@ def app_process_detail(process_id):
     process = query_process(process_id)
     process_dict = process.to_dict()
     process_dict["operations"] = [ope.to_dict() for ope in query_operations(process_id)]
-    if query_thumbnail_path(process.id):
-        process_dict["thumbnailUrl"] = query_thumbnail_path(process.id)
-        process_dict["imageUrl"] = query_img_path(process.id)
+    img_path, thumbnail_path = query_pic_path(process.id)
+    if img_path:
+        process_dict["thumbnailUrl"] = thumbnail_path
+        process_dict["imageUrl"] = img_path
+    process_dict["tag"] = [tag.to_dict() for tag in query_tag_of_process(process.id)]
     return process_dict
 
 
 def app_process_tag_addition(tag_name):
-    add_new_tag(tag_name)
-    return True
+    return add_new_tag(tag_name)
 
 
 def app_process_tag_delete(tag_id):
-    delete_tag(tag_id=tag_id)
-    return True
+    return delete_tag(tag_id=tag_id)
 
 
 def app_process_tag_upgrade(tag_id, tag_name):
-    edit_tag(tag_id=tag_id, tag_name=tag_name)
-    return True
+    return edit_tag(tag_id=tag_id, tag_name=tag_name)
 
 
 def app_process_tags_list():

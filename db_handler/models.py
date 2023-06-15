@@ -38,6 +38,20 @@ class Case(models.Model):
             "lastCompCount": self.last_comp_count
         }
 
+    def to_list_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "hasNorm": self.has_norm,
+            "isWaiting": self.is_waiting,
+            "isRunning": self.is_running,
+            "lastSucc": self.last_succ,
+            "tags": str(self.tags).split(','),
+            "lastRunTime": timezone.localtime(self.last_run_time).strftime('%Y-%m-%d %H:%M:%S'),
+            "lastErrorCount": self.last_error_count,
+            "lastCompCount": self.last_comp_count
+        }
+
     class Meta:
         db_table = "case"
 
@@ -54,7 +68,7 @@ class Process(models.Model):
             "title": self.title,
             "describe": self.describe,
             "operations": [],
-            "createTime": timezone.localtime(self.create_time).strftime('%Y-%m-%d %H:%M:%S')
+            "createTime": timezone.localtime(self.create_time).strftime('%Y-%m-%d %H:%M:%S'),
         }
 
     class Meta:
@@ -202,13 +216,13 @@ class ProcessTag(models.Model):
 
 
 class TagRelation(models.Model):
-    tag_ids = models.ForeignKey(to=ProcessTag, on_delete=models.CASCADE)
+    tag_id = models.ForeignKey(to=ProcessTag, on_delete=models.CASCADE)
     process_id = models.ForeignKey(to=Process, on_delete=models.CASCADE)
 
     def to_dict(self):
         return {
-            "tagId": self.tag_ids,
-            "processId": self.process_id
+            "tagId": self.tag_id_id,
+            "tagName": self.tag_id.tag_name
         }
 
     class Meta:
@@ -245,3 +259,4 @@ class Image(models.Model):
 
     class Meta:
         db_table = "process_relation_img"
+        # indexes = [models.Index(fields=['process_id']), ]

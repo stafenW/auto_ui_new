@@ -33,3 +33,21 @@ def query_thumbnail_path(process_id):
         return Image.objects.get(process=process_id).thumbnail.url
     except Image.DoesNotExist:
         return False
+
+
+def query_pic_path(process_id):
+    try:
+        pic = Image.objects.get(process=process_id)
+        return pic.image.url, pic.thumbnail.url
+    except Image.DoesNotExist:
+        return False, False
+
+
+def query_pic_paths_to_dict(process_ids):
+    pic_paths = {}
+
+    images = Image.objects.filter(process__in=process_ids)
+    for image in images:
+        pic_paths[image.process_id] = (image.image.url, image.thumbnail.url)
+
+    return pic_paths
