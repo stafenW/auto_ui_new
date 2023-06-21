@@ -13,13 +13,6 @@ BASE_DIR = settings.BASE_DIR
 logger = logging.getLogger(__name__)
 
 
-class RunCodeException(Exception):
-    msg = ""
-
-    def __int__(self, msg):
-        self.msg = msg
-
-
 def get_curr_time_str():
     now = datetime.now()
     date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -78,124 +71,116 @@ def format_str(content):
     return html.escape(content)
 
 
-def run_case(code, options, model='chrome'):
-    # code内使用的文件夹根路径
-    cfp = options.get("caseFilePath")
-    run_norm = options.get("runNorm")
-    _FIlE_PATH = os.path.join(cfp, "norm" if run_norm else "current")
+class Run:
+    def __init__(self, options):
+        self.options = options
+        self.run_norm = self.options.get("runNorm")
+        self._FILE_PATH = os.path.join(options.get("caseFilePath"), "norm" if self.run_norm else "current")
+        os.makedirs(self._FILE_PATH, exist_ok=True)
+        self.logs = [
+            f'{get_curr_time_str()} Start run: norm({self.run_norm})'
+        ]
+        self.has_error = False
+        self._VAR_OPE_RECORD_ = []
+        self._time_log_var = {}
 
-    # 根目录不存在，创建根目录
-    if not os.path.exists(_FIlE_PATH):
-        os.makedirs(_FIlE_PATH)
-
-    # 日志
-    logs = [
-        f'{get_curr_time_str()} Start run: norm({run_norm})'
-    ]
-
-    def append_log(log_type, content):
-        logs.append(f'''
+    def append_log(self, log_type, content):
+        self.logs.append(f'''
         <div class="run-log {log_type}">
             {content}
         </div>
         ''')
 
-    # code内时间日志
-    def _TIME_LOGGER_(options):
-        if options["type"] == "start":
-            append_log(
+    def _time_logger(self, opt):
+        if opt["type"] == "start":
+            self.append_log(
                 "start",
-                f'{get_curr_time_str()} Run "{options["opeName"]}" {options["type"]}.'
+                f'{get_curr_time_str()} Run "{opt["opeName"]}" {opt["type"]}.'
             )
         else:
-            append_log("end", "end")
+            self.append_log("end", "end")
 
-    # code内使用的错误日志函数
-    def _ERROR_LOGGER_(driver, e, options):
-        if options.get("ignoreError"):
-            append_log(
+    def _error_logger(self, driver, exc, opt):
+        if opt.get("ignoreError"):
+            self.append_log(
                 "ignore-error",
-                f'{get_curr_time_str()} Run "{options["opeName"]}" failed, but we\'ve ignore this exception。'
+                f'{get_curr_time_str()} Run "{opt["opeName"]}" failed, but we\'ve ignore this exception。'
             )
         else:
-            append_log(
+            self.append_log(
                 "error",
-                f'{get_curr_time_str()} Run "{options["opeName"]}" failed with reason:{repr(e)}'
+                f'{get_curr_time_str()} Run "{opt["opeName"]}" failed with reason:{repr(exc)}'
             )
             driver.quit()
-            logging.error(e)
-            raise
+            logging.error(exc)
+            raise exc
 
-    has_error = False
-    # 变量操作容器
-    _VAR_OPE_RECORD_ = []
-    for i in range(RETRY):
-        try:
-            # 变量操作容器
-            _VAR_OPE_RECORD_ = []
-            # run code
-            exec(code)
-            break
-        except Exception as e:
-            logging.error('---------------------------------------')
-            logging.error(options['caseId'])
-            logging.error('---------------------------------------')
-            logging.error(e)
-            append_log(
-                "ignore-error",
-                f"retry {i + 1} end"
+    def run_case(self, code, model='chrome'):
+        for i in range(RETRY):
+            try:
+                self._VAR_OPE_RECORD_ = []
+                exec(code)
+                break
+            except Exception as exc:
+                logging.error('---------------------------------------')
+                logging.error(self.options['caseId'])
+                logging.error(exc)
+                logging.error('---------------------------------------')
+                self.append_log(
+                    "ignore-error",
+                    f"retry {i + 1} end"
+                )
+                time.sleep(5)
+        else:
+            self.has_error = True
+            self.append_log(
+                "error",
+                "Execution failed after 3 attempts"
             )
-            time.sleep(5)
-    else:
-        has_error = True
-        append_log(
-            "error",
-            "Execution failed after 3 attempts"
-        )
 
-    error_count = 0
+        error_count = 0
 
-    append_log("complete", 'Complete!')
-    camp_time = 0
-    if len(_VAR_OPE_RECORD_):
-        append_log("tip", 'Variable operation result:')
-        for r in _VAR_OPE_RECORD_:
-            var_ope_type = r.get("varOpeType")
-            var_ope_val = os.path.normpath(r.get("varOpeValue"))
-            var_ope_name = r.get("opeName")
-            ope_type = r.get("opeType")
+        self.append_log("complete", 'Complete!')
+        camp_time = 0
+        if len(self._VAR_OPE_RECORD_):
+            self.append_log("tip", 'Variable operation result:')
+            for r in self._VAR_OPE_RECORD_:
+                var_ope_type = r.get("varOpeType")
+                var_ope_val = os.path.normpath(r.get("varOpeValue"))
+                var_ope_name = r.get("opeName")
+                ope_type = r.get("opeType")
 
-            if var_ope_type == "showInResult" or run_norm:
-                url = os.path.join(*(var_ope_val.split(os.sep)[-4:]))
-                append_log("ope-item", f'''
-                <div class="ope-info">Operation '{var_ope_name}' result:</div>
-                <div class="result">
-                    {get_var_info(ope_type, url, model)}
-                </div>
-                ''')
-            else:
-                camp_time += 1
-                sp_path = var_ope_val.split(os.sep)
-                sp_path[-2] = "norm"
-                norm_ope_val = os.path.join(*sp_path)
-                norm_url = os.path.join(*(str(norm_ope_val).split(os.sep)[-4:]))
-                curr_url = os.path.join(*(var_ope_val.split(os.sep)[-4:]))
-                compare_result, compare_status = compare_vars(ope_type, norm_ope_val, var_ope_val)
-                append_log("ope-item", f'''
-                <div class="ope-info">Operation '{var_ope_name}' result:</div>
+                if var_ope_type == "showInResult" or self.run_norm:
+                    url = os.path.join(*(var_ope_val.split(os.sep)[-4:]))
+                    self.append_log("ope-item", f'''
+                    <div class="ope-info">Operation '{var_ope_name}' result:</div>
                     <div class="result">
-                        <div class="norm">{get_var_info(ope_type, norm_url, model)}</div>
-                        <div class="current">{get_var_info(ope_type, curr_url, model)}</div>
+                        {get_var_info(ope_type, url, model)}
                     </div>
-                    <div class="compare-result-">
-                        <div>Compare Result:</div>
-                        <div class="ans" error_tag={compare_status}>{compare_result}</div>
-                    </div>
-                ''')
+                    ''')
+                else:
+                    camp_time += 1
+                    sp_path = var_ope_val.split(os.sep)
+                    sp_path[-2] = "norm"
+                    norm_ope_val = os.path.join(*sp_path)
+                    norm_url = os.path.join(*(str(norm_ope_val).split(os.sep)[-4:]))
+                    curr_url = os.path.join(*(var_ope_val.split(os.sep)[-4:]))
+                    compare_result, compare_status = compare_vars(ope_type, norm_ope_val, var_ope_val)
+                    self.append_log("ope-item", f'''
+                    <div class="ope-info">Operation '{var_ope_name}' result:</div>
+                        <div class="result">
+                            <div class="norm">{get_var_info(ope_type, norm_url, model)}</div>
+                            <div class="current">{get_var_info(ope_type, curr_url, model)}</div>
+                        </div>
+                        <div class="compare-result-">
+                            <div>Compare Result:</div>
+                            <div class="ans" error_tag={compare_status}>{compare_result}</div>
+                        </div>
+                    ''')
 
-                if compare_status:
-                    error_count += 1
-    else:
-        append_log("tip", 'No variable operation.')
+                    if compare_status:
+                        error_count += 1
+        else:
+            self.append_log("tip", 'No variable operation.')
 
-    return has_error, "\n".join(logs), error_count, camp_time
+        return self.has_error, "\n".join(self.logs), error_count, camp_time

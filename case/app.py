@@ -61,11 +61,11 @@ def app_update_case_code(case_id=None, process_id=None):
         operations = json.dumps(dic["operations"])
         del_snapshot_direct(case_id)
         if 'safari' in case.tags.split(','):
-            code = compiler.compile_code(dic["operations"], 'safari')
+            code = compiler.CompileCode().compile_code(case.get("operations"), 'safari'),
         elif 'firefox' in case.tags.split(','):
-            code = compiler.compile_code(dic["operations"], 'firefox')
+            code = compiler.CompileCode().compile_code(case.get("operations"), 'firefox'),
         else:
-            code = compiler.compile_code(dic["operations"], 'chrome')
+            code = compiler.CompileCode().compile_code(case.get("operations"), 'chrome'),
         update_case(case_id, last_succ=0, has_norm=0, code=code, operations=operations)
         return True
     if process_id:
@@ -152,14 +152,15 @@ def app_run_case(case_id, is_debug=1):
     case_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}")
     update_case(case_id, is_running=1)
     run_norm = not bool(case.has_norm)
-    has_error, run_log, error_count, camp_time = runner.run_case(
-        code=case.code,
-        model=model,
+    has_error, run_log, error_count, camp_time = runner.Run(
         options={
             "caseId": case_id,
             "caseFilePath": case_file_path,
             "runNorm": run_norm
         }
+    ).run_case(
+        code=case.code,
+        model=model
     )
     now = datetime.now()
 

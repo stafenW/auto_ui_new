@@ -69,9 +69,9 @@ def get_case_list(request):
         case_list = app_get_case_from_tags(data)
     else:
         case_list = app_get_all_case()
-
+    cases = [case.to_list_dict() for case in case_list]
     return JsonResponse({
-        "data": [case.to_list_dict() for case in case_list],
+        "data": cases,
         "code": 0
     })
 

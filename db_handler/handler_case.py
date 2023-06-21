@@ -12,7 +12,8 @@ def add_new_case(case: json, model='chrome'):
         process_id=case.get("id"),
         title=case.get("caseTitle"),
         tags=','.join(case.get("tag", [])) + f',{model}' if case.get("tag") else model,
-        code=compiler.compile_code(case.get("operations"), model),
+        # code=compiler.compile_code(case.get("operations"), model),
+        code=compiler.CompileCode().compile_code(case.get("operations"), model),
         operations=json.dumps(case.get("operations")),
         create_time=now.strftime("%Y-%m-%d %H:%M:%S")
     )
