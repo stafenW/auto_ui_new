@@ -56,7 +56,6 @@ class Case(models.Model):
         db_table = "case"
 
 
-# Create your models here.
 class Process(models.Model):
     title = models.CharField(max_length=100)
     describe = models.CharField(max_length=500, null=True, blank=True)
@@ -204,11 +203,13 @@ class Operation(models.Model):
 
 class ProcessTag(models.Model):
     tag_name = models.CharField(max_length=30, unique=True)
+    tag_description = models.CharField(max_length=500, null=True, blank=True)
 
     def to_dict(self):
         return {
             "id": self.id,
-            "tagName": self.tag_name
+            "tagName": self.tag_name,
+            "tagDescription": self.tag_description
         }
 
     class Meta:
@@ -259,4 +260,3 @@ class Image(models.Model):
 
     class Meta:
         db_table = "process_relation_img"
-        # indexes = [models.Index(fields=['process_id']), ]

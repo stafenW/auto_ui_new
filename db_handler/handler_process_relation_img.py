@@ -48,6 +48,9 @@ def query_pic_paths_to_dict(process_ids):
 
     images = Image.objects.filter(process__in=process_ids)
     for image in images:
-        pic_paths[image.process_id] = (image.image.url, image.thumbnail.url)
+        try:
+            pic_paths[image.process_id] = (image.image.url, image.thumbnail.url)
+        except ValueError:
+            pic_paths[image.process_id] = (image.image.url, '')
 
     return pic_paths

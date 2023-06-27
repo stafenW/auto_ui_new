@@ -73,6 +73,10 @@ def query_operations(process_id):
     return Operation.objects.filter(process_id=process_id).order_by("process_index")
 
 
+def query_process_id_from_other_process(other_process):
+    return Operation.objects.filter(other_process=other_process).values('process_id')
+
+
 def query_operations_count(process_id):
     return Operation.objects.filter(process_id=process_id).count()
 

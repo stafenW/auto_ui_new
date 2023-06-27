@@ -16,10 +16,10 @@ def add_process(request):
 
 def delete_process(request):
     data = json.loads(request.body)
-    msg = app_delete_process_and_ope(data.get("processId"))
+    msg = app_delete_process_and_ope(data.get("processId"), data.get("force"))
     return JsonResponse({
-        "code": 0,
-        "msg": msg
+        "code": msg[1],
+        "msg": msg[0]
     })
 
 
@@ -55,7 +55,7 @@ def get_process_detail(request):
 def add_process_tag(request):
     data = json.loads(request.body)
     return JsonResponse({
-        "code": app_process_tag_addition(data.get('tagName')),
+        "code": app_process_tag_addition(data),
         "data": app_process_tags_list()
     })
 
@@ -71,7 +71,7 @@ def del_process_tag(request):
 def edit_process_tag(request):
     data = json.loads(request.body)
     return JsonResponse({
-        "code": app_process_tag_upgrade(data.get('tagId'), data.get('tagName')),
+        "code": app_process_tag_upgrade(data),
         "data": app_process_tags_list()
     })
 

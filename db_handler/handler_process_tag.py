@@ -3,9 +3,10 @@ from django.db import IntegrityError
 from .models import ProcessTag
 
 
-def add_new_tag(tag_name):
+def add_new_tag(tag_name, tag_description):
     new_tag = ProcessTag(
-        tag_name=tag_name
+        tag_name=tag_name,
+        tag_description=tag_description
     )
     try:
         new_tag.save()
@@ -22,10 +23,11 @@ def delete_tag(tag_id):
     return True
 
 
-def edit_tag(tag_id, tag_name):
+def edit_tag(tag_id, tag_name, tag_description):
     try:
         tag = ProcessTag.objects.get(id=tag_id)
         tag.tag_name = tag_name
+        tag.tag_description = tag_description
         tag.save()
         return True
     except (ProcessTag.DoesNotExist, IntegrityError):

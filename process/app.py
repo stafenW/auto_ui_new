@@ -31,9 +31,26 @@ def app_add_process_and_operation(process, image_data):
     return query_process(new_process_id).to_dict()
 
 
-def app_delete_process_and_ope(process_id):
+def app_delete_process_and_ope(process_id, force):
+    if force:
+        delete_process_description_img_direct(process_id)
+        return del_process_ope(process_id), 0
+
+    result = '有如下process使用当前process：\n'
+    lens = len(result)
+    process_ids = set()
+    relate_other_processes = query_process_id_from_other_process(process_id)
+    for relate_other_process in relate_other_processes:
+        process = query_process(relate_other_process.get('process_id'))
+        if process.id not in process_ids:
+            result += process.title + '\n'
+            process_ids.add(process.id)
+
+    if len(result) > lens:
+        return result[:-1], 1
+
     delete_process_description_img_direct(process_id)
-    return del_process_ope(process_id)
+    return del_process_ope(process_id), 0
 
 
 def app_update_process_and_operation_and_relation(process, image_data):
@@ -89,6 +106,10 @@ def app_process_list(title='', tag_ids=None):
     return process_dicts
 
 
+def app_get_other_process_list():
+    pass
+
+
 def app_process_detail(process_id):
     process = query_process(process_id)
     process_dict = process.to_dict()
@@ -101,16 +122,16 @@ def app_process_detail(process_id):
     return process_dict
 
 
-def app_process_tag_addition(tag_name):
-    return add_new_tag(tag_name)
+def app_process_tag_addition(tag):
+    return add_new_tag(tag.get('tagName'), tag.get('tagDescription'))
 
 
 def app_process_tag_delete(tag_id):
     return delete_tag(tag_id=tag_id)
 
 
-def app_process_tag_upgrade(tag_id, tag_name):
-    return edit_tag(tag_id=tag_id, tag_name=tag_name)
+def app_process_tag_upgrade(data):
+    return edit_tag(tag_id=data.get('tagId'), tag_name=data.get('tagName'), tag_description=data.get('tagDescription'))
 
 
 def app_process_tags_list():
