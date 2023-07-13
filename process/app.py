@@ -58,7 +58,8 @@ def app_update_process_and_operation_and_relation(process, image_data):
     process_title = process.get("title")
     process_description = process.get("describe")
     process_operation_list = json.loads(process.get("operations"))
-    process_tag_list = json.loads(process.get("tagIds"))
+    tag_ids = process.get("tagIds")
+    process_tag_list = json.loads(tag_ids) if tag_ids else []
 
     update_process_descript(process_id, title=process_title, describe=process_description)
     update_operations(process_operation_list, process_id)
@@ -92,15 +93,15 @@ def app_process_list(title='', tag_ids=None):
     process_ids = [process.id for process in process_list]
     pic_path_dict = query_pic_paths_to_dict(process_ids)
     operations_count_dict = query_operations_count_to_dict(process_ids)
-    tags_dict = query_tags_of_processes_to_dict(process_ids)
+    tags_list = query_tags_of_processes_to_list(process_ids)
 
     for process in process_list:
         process_dict = process.to_dict()
         img_path, thumbnail_path = pic_path_dict.get(process.id, (False, False))
         if img_path:
-            process_dict["thumbnailUrl"] = thumbnail_path
-            process_dict["imageUrl"] = img_path
-        process_dict["tag"] = tags_dict.get(process.id, [])
+            process_dict["thumbnailUrl"] = '/api/process/getPic?fileUrl=' + thumbnail_path
+            process_dict["imageUrl"] = '/api/process/getPic?fileUrl=' + img_path
+        process_dict["tagIds"] = tags_list[process.id]
         process_dict["step"] = operations_count_dict.get(process.id, 0)
         process_dicts.append(process_dict)
     return process_dicts
@@ -116,8 +117,9 @@ def app_process_detail(process_id):
     process_dict["operations"] = [ope.to_dict() for ope in query_operations(process_id)]
     img_path, thumbnail_path = query_pic_path(process.id)
     if img_path:
-        process_dict["thumbnailUrl"] = thumbnail_path
-        process_dict["imageUrl"] = img_path
+        process_dict["thumbnailUrl"] = '/api/process/getPic?fileUrl=' + thumbnail_path
+        process_dict["imageUrl"] = '/api/process/getPic?fileUrl=' + img_path
+        process_dict["imgName"] = thumbnail_path.split('/')[-1]
     process_dict["tag"] = [tag.to_dict() for tag in query_tag_of_process(process.id)]
     return process_dict
 

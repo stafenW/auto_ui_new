@@ -46,3 +46,16 @@ def query_tags_of_processes_to_dict(process_ids):
             tag_dict[process_id] = []
         tag_dict[process_id].append(tag_relation.to_dict())
     return tag_dict
+
+
+def query_tags_of_processes_to_list(process_ids):
+    tag_dict = {}
+    for process_id in process_ids:
+        tag_dict[process_id] = []
+    tag_relations = TagRelation.objects.filter(process_id__in=process_ids)
+    for tag_relation in tag_relations:
+        process_id = tag_relation.process_id_id
+        if process_id not in tag_dict:
+            tag_dict[process_id] = []
+        tag_dict[process_id].append(tag_relation.tag_id_id)
+    return tag_dict

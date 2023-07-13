@@ -5,6 +5,24 @@ from PIL import Image as PILImage
 from io import BytesIO
 
 
+class Piece(models.Model):
+    title = models.CharField(max_length=100)
+    describe = models.CharField(max_length=500, null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "describe": self.describe,
+            "operations": [],
+            "createTime": timezone.localtime(self.create_time).strftime('%Y-%m-%d %H:%M:%S'),
+        }
+
+    class Meta:
+        db_table = "piece"
+
+
 class Case(models.Model):
     process_id = models.IntegerField()
     title = models.CharField(max_length=200)
@@ -20,6 +38,9 @@ class Case(models.Model):
     last_run_time = models.DateTimeField(auto_now=True, null=True, blank=True)
     last_comp_count = models.IntegerField(default=0, null=True, blank=True)
     last_error_count = models.IntegerField(default=0, null=True, blank=True)
+    premise = models.TextField(max_length=500, null=True, blank=True)
+    expect = models.TextField(max_length=500, null=True, blank=True)
+    steps = models.TextField(max_length=500, null=True, blank=True)
 
     def to_dict(self):
         return {
@@ -35,7 +56,10 @@ class Case(models.Model):
             "tags": str(self.tags).split(','),
             "lastRunTime": timezone.localtime(self.last_run_time).strftime('%Y-%m-%d %H:%M:%S'),
             "lastErrorCount": self.last_error_count,
-            "lastCompCount": self.last_comp_count
+            "lastCompCount": self.last_comp_count,
+            "premise": self.premise,
+            "expect": self.expect,
+            "steps": self.steps
         }
 
     def to_list_dict(self):
@@ -49,7 +73,10 @@ class Case(models.Model):
             "tags": str(self.tags).split(','),
             "lastRunTime": timezone.localtime(self.last_run_time).strftime('%Y-%m-%d %H:%M:%S'),
             "lastErrorCount": self.last_error_count,
-            "lastCompCount": self.last_comp_count
+            "lastCompCount": self.last_comp_count,
+            "premise": self.premise,
+            "expect": self.expect,
+            "steps": self.steps
         }
 
     class Meta:
@@ -91,6 +118,7 @@ class Operation(models.Model):
     other_process = models.IntegerField(null=True, blank=True)
     button = models.CharField(max_length=20, null=True, blank=True)
     comp_var = models.CharField(max_length=1000, null=True, blank=True)
+    piece = models.ForeignKey(to=Piece, to_field='id', null=True, blank=True, on_delete=models.PROTECT)
 
     def get_finder(self):
         return {
@@ -148,7 +176,8 @@ class Operation(models.Model):
         elif self.ope_type == "get-text":
             value = {
                 "elFinder": self.get_finder(),
-                "varOpe": self.get_var_ope()
+                "varOpe": self.get_var_ope(),
+                "compVar": self.comp_var
             }
         elif self.ope_type == "other-process":
             value = {
@@ -173,7 +202,7 @@ class Operation(models.Model):
         self.open_url = url
 
     def set_finder(self, finder):
-        self.find_type = finder.get("findType")
+        # self.find_type = finder.get("findType")
         self.find_val = finder.get("findVal")
 
     def set_time_limit(self, time_limit):

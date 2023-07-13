@@ -6,12 +6,9 @@ from env import *
 
 def check_result(model='chrome'):
     cases = query_all_cases_from_tag(model)
-    check_count = 0
-    error_time = 0
+    check_count = sum(case.last_comp_count for case in cases)
+    error_time = sum(case.last_error_count for case in cases)
     error_cases = [error_case.title for error_case in cases if error_case.last_succ == 2]
-    for case in cases:
-        check_count += case.last_comp_count
-        error_time += case.last_error_count
     return check_count, error_time, error_cases
 
 
@@ -21,10 +18,7 @@ def alert_qa():
     safari_check_count, safari_error_time, safari_error_cases = check_result('safari')
 
     cases = query_all_cases()
-    error_count = 0
-    for case in cases:
-        if case.last_succ != 1:
-            error_count += 1
+    error_count = sum(1 for case in cases if case.last_succ != 1)
 
     alert_bot_msg = {
         "groupId": ALERT_BOT_CODE,

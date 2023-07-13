@@ -1,6 +1,6 @@
 from .models import Case
 import json
-from selenium_handler import compiler
+from core_handler import compiler
 from django.utils import timezone
 from file_handler.handler_file import *
 from .handler_operation import *
@@ -12,10 +12,12 @@ def add_new_case(case: json, model='chrome'):
         process_id=case.get("id"),
         title=case.get("caseTitle"),
         tags=','.join(case.get("tag", [])) + f',{model}' if case.get("tag") else model,
-        # code=compiler.compile_code(case.get("operations"), model),
         code=compiler.CompileCode().compile_code(case.get("operations"), model),
         operations=json.dumps(case.get("operations")),
-        create_time=now.strftime("%Y-%m-%d %H:%M:%S")
+        create_time=now.strftime("%Y-%m-%d %H:%M:%S"),
+        premise=case.get("premise"),
+        steps=case.get("steps"),
+        expect=case.get("expect")
     )
     new_case.save()
     add_snapshot_direct(new_case.id)
@@ -73,14 +75,16 @@ def get_cases_from_tags(tags):
 
 
 def query_all_cases_from_relation_process_id(id):
-    def find_process_ids_recursive(process_id, result):
+    result = []
+
+    def find_process_ids_recursive(process_id):
+        nonlocal result
         operations = Operation.objects.filter(other_process=process_id)
         for operation in operations:
             result.append(operation.process_id_id)
-            find_process_ids_recursive(operation.process_id_id, result)
+            find_process_ids_recursive(operation.process_id_id)
 
-    result = []
-    find_process_ids_recursive(id, result)
+    find_process_ids_recursive(id)
     result = list(set(result))
 
     return Case.objects.filter(process_id__in=result)

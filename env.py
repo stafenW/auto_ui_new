@@ -11,10 +11,12 @@ CODE_INDEX = ['import', 'chrome_options', 'driver', '.click', 'send_keys', 'time
 # linux服务器上该服务的url
 BASE_URL_TEST = 'http://192.168.20.34:8086'
 # 键盘操作的按键
-ALL_BUTTON = ['ENTER', 'TAB', 'ESCAPE', 'SPACE', 'DELETE', 'BACKSPACE']
+ALL_BUTTON = ['Backquote', 'Minus', 'Equal', 'Backslash', 'Backspace', 'Tab',
+              'Delete', 'Escape', 'ArrowDown', 'End', 'Enter', 'Home', 'Insert', 'PageDown', 'PageUp', 'ArrowRight',
+              'ArrowUp']
 # MACOS在如下服务器上跑
 # MACOS_URL = 'http://192.168.19.93:8086' # wilbur的mac
-MACOS_URL = 'http://192.168.19.11:8086' # 旁边桌子上的mac
+MACOS_URL = 'http://192.168.19.11:8086'  # 旁边桌子上的mac
 # 通知给alert时的链接
 PLATFORM_URL = 'https://autoui.w.chime.me/#/case'
 # 多线程执行chrome，同时几个线程

@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.urls import path, include
 from . import views
-from alert import check_alert
 
 urlpatterns = [
     path('api/process/', include("process.urls")),

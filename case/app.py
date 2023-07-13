@@ -4,7 +4,7 @@ import concurrent.futures
 
 from django.http import HttpResponse
 
-from selenium_handler import runner
+from core_handler import runner
 import logging
 from alert.check_alert import *
 
@@ -130,7 +130,7 @@ def app_get_picture(file_url, model):
             method='GET'
         )
         return result
-    file_url = os.path.join(BASE_DIR, file_url)
+    file_url = os.path.join(MEDIA_ROOT, file_url)
     with open(file_url, 'rb') as f:
         image_data = f.read()
     response = HttpResponse(image_data, content_type='image/jpeg')
@@ -149,7 +149,7 @@ def app_run_case(case_id, is_debug=1):
         model = 'safari'
     logging.info(f'开始run{case_id}')
 
-    case_file_path = os.path.join(BASE_DIR, "case-records", f"case-{case_id}")
+    case_file_path = os.path.join(MEDIA_ROOT, "case-records", f"case-{case_id}")
     update_case(case_id, is_running=1)
     run_norm = not bool(case.has_norm)
     has_error, run_log, error_count, camp_time = runner.Run(

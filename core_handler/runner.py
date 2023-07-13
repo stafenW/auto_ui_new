@@ -1,7 +1,7 @@
 import logging
 import os
-from datetime import datetime
 import time
+from datetime import datetime
 from django.conf import settings
 import cv2
 import numpy as np
@@ -73,6 +73,10 @@ def format_str(content):
 
 class Run:
     def __init__(self, options):
+        self.page = None
+        self.context = None
+        self.browser = None
+        self.old_page = None
         self.options = options
         self.run_norm = self.options.get("runNorm")
         self._FILE_PATH = os.path.join(options.get("caseFilePath"), "norm" if self.run_norm else "current")
@@ -100,7 +104,7 @@ class Run:
         else:
             self.append_log("end", "end")
 
-    def _error_logger(self, driver, exc, opt):
+    def _error_logger(self, exc, opt):
         if opt.get("ignoreError"):
             self.append_log(
                 "ignore-error",
@@ -111,7 +115,8 @@ class Run:
                 "error",
                 f'{get_curr_time_str()} Run "{opt["opeName"]}" failed with reason:{repr(exc)}'
             )
-            driver.quit()
+            self.context.close()
+            self.browser.close()
             logging.error(exc)
             raise exc
 
@@ -120,6 +125,7 @@ class Run:
             try:
                 self._VAR_OPE_RECORD_ = []
                 exec(code)
+
                 break
             except Exception as exc:
                 logging.error('---------------------------------------')
