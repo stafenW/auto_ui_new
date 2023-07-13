@@ -8,10 +8,10 @@ env.py
 venv
 media
 
-alert
-auto_ui_new
-case
-core_handler
-db_handler
-file_handler
-process
+#alert
+#auto_ui_new
+#case
+#core_handler
+#db_handler
+#file_handler
+#process
