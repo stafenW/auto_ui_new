@@ -61,11 +61,11 @@ def app_update_case_code(case_id=None, process_id=None):
         operations = json.dumps(dic["operations"])
         del_snapshot_direct(case_id)
         if 'safari' in case.tags.split(','):
-            code = compiler.CompileCode().compile_code(case.get("operations"), 'safari'),
+            code = compiler.CompileCode().compile_code(dic["operations"], 'safari')
         elif 'firefox' in case.tags.split(','):
-            code = compiler.CompileCode().compile_code(case.get("operations"), 'firefox'),
+            code = compiler.CompileCode().compile_code(dic["operations"], 'firefox')
         else:
-            code = compiler.CompileCode().compile_code(case.get("operations"), 'chrome'),
+            code = compiler.CompileCode().compile_code(dic["operations"], 'chrome')
         update_case(case_id, last_succ=0, has_norm=0, code=code, operations=operations)
         return True
     if process_id:
