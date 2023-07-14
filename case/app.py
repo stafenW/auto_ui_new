@@ -26,17 +26,22 @@ def _request_safari(tags, url, args=None, method='POST'):
 
 def _run_chrome_case(case_list):
     with concurrent.futures.ThreadPoolExecutor(max_workers=CHROME_THREADING) as executor:
-        futures = []
+        # futures = []
+        futures = [executor.submit(app_run_case, case_id, 0) for case_id in case_list]
+        for future in concurrent.futures.as_completed(futures):
+            # 获取任务结果
+            result = future.result()
+            print(f"Task completed: {result}")
 
-        for case_id in case_list:
-            future = executor.submit(app_run_case, case_id, 0)
-            futures.append(future)
-
-            if len(futures) == CHROME_THREADING:
-                concurrent.futures.wait(futures)
-                futures = []
-
-        concurrent.futures.wait(futures)
+        # for case_id in case_list:
+        #     future = executor.submit(app_run_case, case_id, 0)
+        #     futures.append(future)
+        #
+        #     if len(futures) == CHROME_THREADING:
+        #         concurrent.futures.wait(futures)
+        #         futures = []
+        #
+        # concurrent.futures.wait(futures)
 
 
 def app_add_new_cases(data):
@@ -181,6 +186,8 @@ def app_run_case(case_id, is_debug=1):
         run_log=run_log,
         is_running=0
     )
+
+    return True
 
 
 def app_run_cases_from_tags(tags):
