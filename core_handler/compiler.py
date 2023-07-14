@@ -142,7 +142,7 @@ with sync_playwright() as playwright:
         else:
             self.tmp = f'''
     {img_file_path_var} = os.path.join(self._FILE_PATH, "{img_name}")
-    self.page.screenshot(path="{img_file_path_var}")
+    self.page.screenshot(path={img_file_path_var})
 '''
         self._write_var_operation(img_file_path_var, var_ope, ope_name, ope_type)
         self.code += self._handle_code_(self.tmp, ope_type, ope_name)
