@@ -8,6 +8,11 @@ WORKDIR /usr/src/app
 
 
 RUN pip install --upgrade pip
+
+RUN for key in AA8E81B4331F7F50 7638D0442B90D010 9D6D8F6BC857C906; do \
+        gpg --recv-keys "$key" \
+        && gpg --export "$key" | apt-key add - ; \
+    done
 RUN apt update
 RUN apt-get -y install ffmpeg
 RUN apt-get -y install libsm6
