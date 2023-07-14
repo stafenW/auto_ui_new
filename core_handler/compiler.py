@@ -137,7 +137,7 @@ with sync_playwright() as playwright:
         if find_val:
             self.tmp = f'''
     {img_file_path_var} = os.path.join(self._FILE_PATH, "{img_name}")
-    self.page.locator("{find_val}").screenshot(path="{img_file_path_var}")
+    self.page.locator("{find_val}").screenshot(path={img_file_path_var})
 '''
         else:
             self.tmp = f'''
