@@ -9,10 +9,9 @@ WORKDIR /usr/src/app
 
 RUN pip install --upgrade pip
 
-RUN for key in AA8E81B4331F7F50 7638D0442B90D010 9D6D8F6BC857C906; do \
-        gpg --recv-keys "$key" \
-        && gpg --export "$key" | apt-key add - ; \
-    done
+RUN   apt-key del 7fa2af80
+ADD   https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb .
+RUN   dpkg -i cuda-keyring_1.0-1_all.deb
 RUN apt update
 RUN apt-get -y install ffmpeg
 RUN apt-get -y install libsm6
