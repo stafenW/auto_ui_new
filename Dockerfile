@@ -2,7 +2,7 @@ FROM stafenw/auto-ui:latest
 
 WORKDIR /usr/src/app
 
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN apt-get update
 RUN apt-get -y install ffmpeg
 RUN apt-get -y install libsm6
