@@ -2,7 +2,7 @@ FROM python:3.9.17-slim
 
 WORKDIR /usr/src/app
 
-RUN pip install --upgrade pip
+#RUN pip install --upgrade pip
 
 RUN apt-get update
 RUN apt-get install -y libnss3 libnss3-tools
