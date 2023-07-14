@@ -80,7 +80,7 @@ with sync_playwright() as playwright:
 
     def _write_jump_page(self, ope_type, ope_name):
         self.tmp = f'''
-    with context.expect_page() as new_page_info:
+    with self.context.expect_page() as new_page_info:
         self.page.click('[target=\"_blank\"]')
     self.old_page = self.page
     self.page = new_page_info.value
