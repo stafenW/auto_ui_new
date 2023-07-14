@@ -3,7 +3,7 @@ FROM stafenw/auto-ui:latest
 WORKDIR /usr/src/app
 
 
-RUN apt-get update
+#RUN apt-get update
 RUN apt-get -y install ffmpeg
 RUN apt-get -y install libsm6
 RUN apt-get -y install libxext6
