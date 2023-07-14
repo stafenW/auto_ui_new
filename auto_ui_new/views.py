@@ -1,6 +1,4 @@
-from django.http import JsonResponse
 from django.shortcuts import render
-import asyncio
 
 
 def index(request):

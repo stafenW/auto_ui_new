@@ -10,6 +10,7 @@ from env import *
 import html
 
 BASE_DIR = settings.BASE_DIR
+MEDIA_ROOT = settings.MEDIA_ROOT
 logger = logging.getLogger(__name__)
 
 
@@ -21,7 +22,7 @@ def get_curr_time_str():
 
 def get_var_info(ope_name, url, model='chrome'):
     if ope_name == "get-text":
-        url = os.path.join(BASE_DIR, url)
+        url = os.path.join(MEDIA_ROOT, url)
         with open(url, "r") as f:
             content = f.read()
             content = f'''
