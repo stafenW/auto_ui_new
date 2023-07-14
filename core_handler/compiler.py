@@ -78,10 +78,10 @@ with sync_playwright() as playwright:
 '''
         self.code += self._handle_code_(self.tmp, ope_type, ope_name)
 
-    def _write_jump_page(self, ope_type, ope_name):
+    def _write_jump_page(self, find_val, ope_type, ope_name):
         self.tmp = f'''
     with self.context.expect_page() as new_page_info:
-        self.page.click('[target=\"_blank\"]')
+        self.page.click('{find_val}')
     self.old_page = self.page
     self.page = new_page_info.value
     self.page.wait_for_load_state()
@@ -190,7 +190,7 @@ with sync_playwright() as playwright:
             if ope_type == "open-page":
                 self._write_open_page(self._es_str(ov["url"]), ope_type, ope_name)
             elif ope_type == "jump":
-                self._write_jump_page(ope_type, ope_name)
+                self._write_jump_page(self._es_str(ef["url"]), ope_type, ope_name)
             elif ope_type == "click":
                 self._write_click(self._es_str(ef["findVal"]), ope_type, ope_name)
             elif ope_type == "try-to-click":
