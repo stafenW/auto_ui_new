@@ -2,8 +2,8 @@ FROM stafenw/auto-ui:latest
 
 WORKDIR /usr/src/app
 
-RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/*
+RUN rm /etc/apt/sources.list.d/cuda.list
+RUN rm /etc/apt/sources.list.d/nvidia-ml.list
 RUN apt-get update
 RUN apt-get -y install ffmpeg
 RUN apt-get -y install libsm6
