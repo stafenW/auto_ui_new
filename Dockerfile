@@ -1,4 +1,4 @@
-FROM stafenw/auto-ui:latest
+FROM python:3.9.17-slim
 
 WORKDIR /usr/src/app
 
