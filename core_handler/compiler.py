@@ -89,7 +89,7 @@ with sync_playwright() as playwright:
 '''
         self.code += self._handle_code_(self.tmp, ope_type, ope_name)
 
-    def _write_click(self, find_val, ope_type, ope_name, ignore=True):
+    def _write_click(self, find_val, ope_type, ope_name, ignore=False):
         self.tmp = f'''
     self.page.click('{find_val}')
 '''
