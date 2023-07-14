@@ -190,7 +190,7 @@ with sync_playwright() as playwright:
             if ope_type == "open-page":
                 self._write_open_page(self._es_str(ov["url"]), ope_type, ope_name)
             elif ope_type == "jump":
-                self._write_jump_page(self._es_str(ef["url"]), ope_type, ope_name)
+                self._write_jump_page(self._es_str(ov["url"]), ope_type, ope_name)
             elif ope_type == "click":
                 self._write_click(self._es_str(ef["findVal"]), ope_type, ope_name)
             elif ope_type == "try-to-click":
