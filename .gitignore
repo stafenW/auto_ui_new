@@ -4,3 +4,4 @@ static
 templates
 db_handler/migrations
 media
+env.py
