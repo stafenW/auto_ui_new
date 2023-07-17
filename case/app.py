@@ -26,22 +26,14 @@ def _request_safari(tags, url, args=None, method='POST'):
 
 def _run_chrome_case(case_list):
     with concurrent.futures.ThreadPoolExecutor(max_workers=CHROME_THREADING) as executor:
-        # futures = []
         futures = [executor.submit(app_run_case, case_id, 0) for case_id in case_list]
-        for future in concurrent.futures.as_completed(futures):
-            # 获取任务结果
-            result = future.result()
-            print(f"Task completed: {result}")
+        concurrent.futures.wait(futures)
 
-        # for case_id in case_list:
-        #     future = executor.submit(app_run_case, case_id, 0)
-        #     futures.append(future)
-        #
-        #     if len(futures) == CHROME_THREADING:
-        #         concurrent.futures.wait(futures)
-        #         futures = []
-        #
-        # concurrent.futures.wait(futures)
+
+def _run_safari_case(case_list):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        futures = [executor.submit(app_run_case, case_id, 0) for case_id in case_list]
+        concurrent.futures.wait(futures)
 
 
 def app_add_new_cases(data):
@@ -202,10 +194,14 @@ def app_run_all_cases():
     cases = query_all_cases()
     chrome_cases_id_list = [case.id for case in cases if 'chrome' in case.tags]
     safari_cases_id_list = [case.id for case in cases if 'safari' in case.tags]
-    thread = threading.Thread(target=_run_chrome_case, args=(chrome_cases_id_list,))
-    thread.start()
+    thread_chrome = threading.Thread(target=_run_chrome_case, args=(chrome_cases_id_list,))
+    thread_safari = threading.Thread(target=_run_safari_case, args=(safari_cases_id_list,))
 
-    for safari_case_id in safari_cases_id_list:
-        app_run_case(case_id=safari_case_id)
+    thread_chrome.start()
+    thread_safari.start()
+
+    thread_chrome.join()
+    thread_safari.join()
+
     logging.info("已跑完所有案例")
     alert_qa()
