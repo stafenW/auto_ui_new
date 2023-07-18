@@ -277,13 +277,22 @@ class Image(models.Model):
             self.create_thumbnail()
 
     def create_thumbnail(self):
-        image_type = self.image.name.split(".")[-1]
+        image_type = self.image.name.split(".")[-1].lower()
         thumbnail_name = f'{self.image.name.split(".")[0]}_thumbnail.{image_type}'
         size = (144, 84)
         image = PILImage.open(self.image)
         image.thumbnail(size)
         thumbnail_bytes = BytesIO()
-        image.save(thumbnail_bytes, image_type.upper())
+
+        if image.mode == 'RGBA':
+            image = image.convert('RGB')
+
+        if image_type == 'png':
+            fmt = 'PNG'
+        else:
+            fmt = 'JPEG'
+
+        image.save(thumbnail_bytes, format=fmt)
         self.thumbnail.save(thumbnail_name, thumbnail_bytes, save=False)
         self.save()
 
