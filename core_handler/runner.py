@@ -136,8 +136,6 @@ class Run:
                     "ignore-error",
                     f"retry {i + 1} end"
                 )
-                self.context.close()
-                self.browser.close()
                 time.sleep(5)
         else:
             self.has_error = True
