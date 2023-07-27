@@ -1,6 +1,7 @@
 import platform
 import threading
 import concurrent.futures
+import time
 
 from django.http import HttpResponse
 
@@ -192,6 +193,7 @@ def app_run_cases_from_tags(tags):
 
 def app_run_all_cases():
     cases = query_all_cases()
+    time.sleep(300)
     chrome_cases_id_list = [case.id for case in cases if 'chrome' in case.tags]
     safari_cases_id_list = [case.id for case in cases if 'safari' in case.tags]
     thread_chrome = threading.Thread(target=_run_chrome_case, args=(chrome_cases_id_list,))
