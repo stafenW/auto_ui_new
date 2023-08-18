@@ -9,15 +9,15 @@ ALL_TAGS = ['execute on launch', 'execute on everyday', 'about lead', 'about tra
 # case code包含如下行的时候会展示出来
 CODE_INDEX = ['import', 'chrome_options', 'driver', '.click', 'send_keys', 'time.sleep', 'WebDriverWait']
 # linux服务器上该服务的url
-BASE_URL_TEST = 'http://192.168.20.34:8086'
+
 # 键盘操作的按键
 ALL_BUTTON = ['Backquote', 'Minus', 'Equal', 'Backslash', 'Backspace', 'Tab',
               'Delete', 'Escape', 'ArrowDown', 'End', 'Enter', 'Home', 'Insert', 'PageDown', 'PageUp', 'ArrowRight',
               'ArrowUp']
 # MACOS在如下服务器上跑
-# MACOS_URL = 'http://192.168.19.93:8086' # wilbur的mac
-MACOS_URL = 'http://192.168.19.11:8086'  # 旁边桌子上的mac
+
+
 # 通知给alert时的链接
-PLATFORM_URL = 'https://autoui.w.chime.me/#/case'
+
 # 多线程执行chrome，同时几个线程
 CHROME_THREADING = 5
