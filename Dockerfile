@@ -1,4 +1,4 @@
-FROM harbor.w.chime.me/crm/auto-ui:base
+FROM wilburw/auto-ui:base
 
 WORKDIR /usr/src/app
 
