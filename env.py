@@ -3,7 +3,7 @@ LOWEST_SIMILARITY = 96
 # case报错重试几次
 RETRY = 3
 # team的alert bot通知接口的key
-ALERT_BOT_CODE = 're_01f56c58e0e9414c84c741ce29e652ca'
+ALERT_BOT_CODE = ''
 # case的tag
 ALL_TAGS = ['execute on launch', 'execute on everyday', 'about lead', 'about transaction']
 # case code包含如下行的时候会展示出来
